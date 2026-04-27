@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron'
 import { randomUUID } from 'crypto'
 import { IPC } from '../../shared/ipc-channels'
-import { IPCResult } from '../../shared/types'
+import { IPCResult, Account } from '../../shared/types'
 import { getRegistry } from '../providers/registry'
 import { GitLabProvider } from '../providers/gitlab/index'
 import { validatePAT, startOAuthFlow } from '../providers/gitlab/auth'
@@ -25,10 +25,23 @@ function fail(error: unknown): IPCResult<never> {
 // ---------------------------------------------------------------------------
 export function registerAuthHandlers(): void {
   // List accounts stored in SQLite
-  ipcMain.handle(IPC.AUTH.LIST_ACCOUNTS, (): IPCResult<unknown[]> => {
+  ipcMain.handle(IPC.AUTH.LIST_ACCOUNTS, (): IPCResult<Account[]> => {
     try {
       const db = getDb()
-      const accounts = db.prepare('SELECT * FROM accounts ORDER BY created_at ASC').all()
+      type AccountRow = {
+        id: string; provider: string; auth_method: string; base_url: string
+        display_name: string; username: string; avatar_url: string | null; created_at: string
+      }
+      const rows = db.prepare('SELECT * FROM accounts ORDER BY created_at ASC').all() as AccountRow[]
+      const accounts: Account[] = rows.map((r) => ({
+        id: r.id,
+        provider: r.provider as Account['provider'],
+        authMethod: r.auth_method as Account['authMethod'],
+        baseUrl: r.base_url,
+        displayName: r.display_name,
+        username: r.username,
+        avatarUrl: r.avatar_url ?? '',
+      }))
       return ok(accounts)
     } catch (err) {
       return fail(err)

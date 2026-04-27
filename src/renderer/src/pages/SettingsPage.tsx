@@ -1,8 +1,13 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
+import { Account } from '@shared/types'
 import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
+
+interface AppSettings {
+  theme?: 'dark' | 'light' | 'system'
+}
 
 interface SettingsPageProps {
   section?: string
@@ -16,18 +21,18 @@ export function SettingsPage({ section }: SettingsPageProps) {
   const setActiveAccountId = useAccountStore((s) => s.setActiveAccountId)
   const qc = useQueryClient()
 
-  const { data: accounts = [] } = useQuery<any[]>({
+  const { data: accounts = [] } = useQuery<Account[]>({
     queryKey: ['accounts'],
-    queryFn: () => invoke<any[]>(IPC.AUTH.LIST_ACCOUNTS)
+    queryFn: () => invoke<Account[]>(IPC.AUTH.LIST_ACCOUNTS)
   })
 
-  const { data: settings } = useQuery<any>({
+  const { data: settings } = useQuery<AppSettings>({
     queryKey: ['settings-all'],
-    queryFn: () => invoke<any>(IPC.SETTINGS.GET_ALL)
+    queryFn: () => invoke<AppSettings>(IPC.SETTINGS.GET_ALL)
   })
 
   const addPatMutation = useMutation({
-    mutationFn: (payload: { baseUrl: string; pat: string }) => invoke<any>(IPC.AUTH.ADD_ACCOUNT_PAT, payload),
+    mutationFn: (payload: { baseUrl: string; pat: string }) => invoke<Account>(IPC.AUTH.ADD_ACCOUNT_PAT, payload),
     onSuccess: () => qc.invalidateQueries({ queryKey: ['accounts'] })
   })
 
@@ -110,7 +115,7 @@ function AccountsSection({
   onRemove,
   onAddPat
 }: {
-  accounts: any[]
+  accounts: Account[]
   activeAccountId: string
   onSwitch: (id: string) => void
   onRemove: (id: string) => void
@@ -152,8 +157,8 @@ function AccountsSection({
         {accounts.map((a) => (
           <div key={a.id} className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm text-neutral-200">{a.display_name} ({a.username})</p>
-              <p className="text-xs text-neutral-600">{a.base_url}</p>
+              <p className="truncate text-sm text-neutral-200">{a.displayName} ({a.username})</p>
+              <p className="text-xs text-neutral-600">{a.baseUrl}</p>
             </div>
             {activeAccountId === a.id ? (
               <span className="rounded bg-accent-500/20 px-2 py-0.5 text-xs text-accent-400">Active</span>

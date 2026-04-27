@@ -8,9 +8,13 @@ module.exports = {
         sans: ['Inter', 'system-ui', 'sans-serif']
       },
       colors: {
-        // Base surfaces
+        // Base surfaces — numeric scale matches usage in components
         base: {
           DEFAULT: '#0a0a0a',
+          950: '#0a0a0a',
+          900: '#111111',
+          800: '#1a1a1a',
+          700: '#242424',
           surface: '#111111',
           elevated: '#1a1a1a',
           border: '#2a2a2a'
@@ -26,6 +30,7 @@ module.exports = {
         status: {
           success: '#22c55e',
           warning: '#f59e0b',
+          failed: '#ef4444',  // alias used throughout components
           error: '#ef4444',
           info: '#3b82f6',
           running: '#f59e0b',

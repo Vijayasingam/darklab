@@ -99,7 +99,7 @@ export function transformMR(
     mergedAt: (raw['merged_at'] as string | null) ?? null,
     closedAt: (raw['closed_at'] as string | null) ?? null,
     threadCount: (raw['user_notes_count'] as number) ?? 0,
-    unresolvedThreadCount: (raw['blocking_discussions_resolved'] as boolean) ? 0 : 0,
+    unresolvedThreadCount: 0, // not available from MR list endpoint; requires fetching /discussions
     userNotesCount: (raw['user_notes_count'] as number) ?? 0,
     approvalsRequired: 0, // fetched from approvals endpoint
     approvalsGiven: 0,

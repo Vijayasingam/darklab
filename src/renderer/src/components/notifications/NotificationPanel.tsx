@@ -31,7 +31,7 @@ export function NotificationPanel() {
       qc.invalidateQueries({ queryKey: ['notifications', accountId] })
     })
     return () => unsub()
-  }, [accountId])
+  }, [accountId, qc])
 
   if (!open) return <></>
 

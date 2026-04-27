@@ -61,7 +61,7 @@ export function App() {
       }),
 
       // Re-auth required (OAuth token expired unrecoverably)
-      on('auth:reauth-required', (payload) => {
+      on(IPC.AUTH.REAUTH_REQUIRED, (payload) => {
         const { accountId } = payload as { accountId: string }
         console.warn('Re-auth required for account:', accountId)
         // Renderer will show a banner — handled by NotificationPanel

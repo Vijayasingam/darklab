@@ -1,0 +1,112 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  # -------------------------------------------------------------------------
+  # Shared checks (typecheck + lint) run once before the platform matrix
+  # -------------------------------------------------------------------------
+  check:
+    name: Typecheck & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm run lint
+
+  # -------------------------------------------------------------------------
+  # Build + publish per platform
+  # -------------------------------------------------------------------------
+  release:
+    name: Release — ${{ matrix.os }}
+    needs: check
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest    # universal (x64 + arm64)
+            build_args: --mac
+          - os: windows-latest  # NSIS installer (x64)
+            build_args: --win
+          - os: ubuntu-latest   # AppImage + deb (x64)
+            build_args: --linux
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v5
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      # Python is required by node-gyp (better-sqlite3 native rebuild)
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.x'
+
+      # macOS: signing is skipped until a Developer ID certificate is available.
+      # To enable signing later, add the MACOS_CERTIFICATE_BASE64,
+      # MACOS_CERTIFICATE_PASSWORD, MACOS_KEYCHAIN_PASSWORD, APPLE_ID,
+      # APPLE_APP_SPECIFIC_PASSWORD, and APPLE_TEAM_ID secrets and restore
+      # the certificate import step below.
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build + publish
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Disable macOS auto-signing until a Developer ID certificate exists
+          CSC_IDENTITY_AUTO_DISCOVERY: false
+        run: pnpm run package -- ${{ matrix.build_args }} --publish always
+
+  # -------------------------------------------------------------------------
+  # Draft a GitHub Release with auto-generated release notes
+  # -------------------------------------------------------------------------
+  draft-release:
+    name: Draft GitHub Release
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: version
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Update Release to published
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release edit "$GITHUB_REF_NAME" \
+            --draft=false \
+            --title "dark-git ${{ steps.version.outputs.version }}" \
+            --generate-notes

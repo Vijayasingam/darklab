@@ -1,9 +1,13 @@
-import { defineConfig } from 'eslint/config'
-import tsPlugin from '@electron-toolkit/eslint-config-ts'
-import prettierPlugin from '@electron-toolkit/eslint-config-prettier'
+import tseslint from 'typescript-eslint'
 
-export default defineConfig([
+export default tseslint.config(
   { ignores: ['**/node_modules/**', '**/dist/**', '**/out/**', '**/release/**'] },
-  tsPlugin,
-  prettierPlugin
-])
+  ...tseslint.configs.recommended,
+  {
+    rules: {
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-require-imports': 'off'
+    }
+  }
+)

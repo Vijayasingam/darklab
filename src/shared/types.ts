@@ -102,7 +102,7 @@ export interface MergeRequest {
   updatedAt: string
   mergedAt: string | null
   closedAt: string | null
-  threadCount: int
+  threadCount: number
   unresolvedThreadCount: number
   userNotesCount: number
   approvalsRequired: number
@@ -480,5 +480,4 @@ export interface DraftComment {
   createdAt: string
 }
 
-// Utility types
-type int = number
+

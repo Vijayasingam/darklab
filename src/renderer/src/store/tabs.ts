@@ -31,9 +31,11 @@ function makeHomeTab(): AppTab {
 
 export const useTabsStore = create<TabsState>()(
   persist(
-    (set, get) => ({
-      tabs: [makeHomeTab()],
-      activeTabId: null,
+    (set, get) => {
+      const initialTab = makeHomeTab()
+      return {
+      tabs: [initialTab],
+      activeTabId: initialTab.id,
 
       openTab(tab, opts) {
         const { activeTabId } = get()
@@ -100,7 +102,8 @@ export const useTabsStore = create<TabsState>()(
           tabs: state.tabs.map((t) => (t.id === tabId ? { ...t, ...patch } : t))
         }))
       }
-    }),
+    }
+  },
     {
       name: 'darkgit-tabs',
       storage: createJSONStorage(() => localStorage)
