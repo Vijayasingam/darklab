@@ -14,12 +14,11 @@ import {
 import {
   SortableContext,
   horizontalListSortingStrategy,
-  useSortable,
-  arrayMove
+  useSortable
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 
-function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }): JSX.Element {
+function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: tab.id })
   const closeTab = useTabsStore((s) => s.closeTab)
   const setActiveTab = useTabsStore((s) => s.setActiveTab)
@@ -68,7 +67,7 @@ function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }): JSX
   )
 }
 
-export function TabBar(): JSX.Element {
+export function TabBar() {
   const tabs = useTabsStore((s) => s.tabs)
   const activeTabId = useTabsStore((s) => s.activeTabId)
   const reorderTabs = useTabsStore((s) => s.reorderTabs)

@@ -27,6 +27,14 @@ interface StoreSchema {
   recentItems: unknown[]
 }
 
+type AppStore = {
+  get<Key extends keyof StoreSchema>(key: Key): StoreSchema[Key]
+  get<Key extends keyof StoreSchema>(key: Key, defaultValue: StoreSchema[Key]): StoreSchema[Key]
+  get(key: string, defaultValue?: unknown): unknown
+  set<Key extends keyof StoreSchema>(key: Key, value: StoreSchema[Key]): void
+  set(key: string, value: unknown): void
+}
+
 const defaults: StoreSchema = {
   activeAccountId: null,
   onboardingComplete: false,
@@ -43,7 +51,7 @@ const defaults: StoreSchema = {
   recentItems: []
 }
 
-let store: ElectronStore<StoreSchema>
+let store: (ElectronStore<StoreSchema> & AppStore) | undefined
 
 export function initStore(): void {
   const StoreCtor = ((ElectronStore as unknown as { default?: typeof ElectronStore }).default ??
@@ -53,10 +61,10 @@ export function initStore(): void {
     name: 'dark-git-settings',
     defaults,
     clearInvalidConfig: true
-  })
+  }) as ElectronStore<StoreSchema> & AppStore
 }
 
-export function getStore(): ElectronStore<StoreSchema> {
+export function getStore(): AppStore {
   if (!store) throw new Error('Store not initialised. Call initStore() first.')
   return store
 }
@@ -69,6 +77,7 @@ export function storeToken(accountId: string, token: string): void {
   if (!safeStorage.isEncryptionAvailable()) {
     throw new Error('Encryption not available on this system')
   }
+  const store = getStore()
   const encrypted = safeStorage.encryptString(token)
   const tokens = store.get('tokens', {})
   tokens[accountId] = encrypted.toString('base64')
@@ -77,6 +86,7 @@ export function storeToken(accountId: string, token: string): void {
 
 export function retrieveToken(accountId: string): string | null {
   if (!safeStorage.isEncryptionAvailable()) return null
+  const store = getStore()
   const tokens = store.get('tokens', {})
   const encrypted = tokens[accountId]
   if (!encrypted) return null
@@ -88,6 +98,7 @@ export function retrieveToken(accountId: string): string | null {
 }
 
 export function deleteToken(accountId: string): void {
+  const store = getStore()
   const tokens = store.get('tokens', {})
   delete tokens[accountId]
   store.set('tokens', tokens)

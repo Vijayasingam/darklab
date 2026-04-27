@@ -6,7 +6,7 @@ import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { cn, formatRelativeTime, formatDuration } from '../lib/utils'
-import { Loader2, PlayCircle, XCircle, RefreshCw, Clock } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 
 interface PipelineListPageProps {
   filters?: Record<string, unknown>
@@ -20,7 +20,7 @@ const STATUS_OPTIONS: { label: string; value: PipelineStatus | 'all' }[] = [
   { label: 'Pending', value: 'pending' }
 ]
 
-export function PipelineListPage({ filters }: PipelineListPageProps): JSX.Element {
+export function PipelineListPage({ filters }: PipelineListPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
   const [status, setStatus] = useState<PipelineStatus | 'all'>('all')

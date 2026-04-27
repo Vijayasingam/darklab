@@ -1,18 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
-import { Pipeline, Stage, Job, TestReport } from '@shared/types'
+import { Pipeline, Stage, TestReport } from '@shared/types'
 import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { cn, formatRelativeTime, formatDuration } from '../lib/utils'
-import { Loader2, RefreshCw, XCircle, PlayCircle, FlaskConical } from 'lucide-react'
+import { Loader2, FlaskConical } from 'lucide-react'
 
 interface PipelinePageProps {
   repoId: number
   pipelineId: number
 }
 
-export function PipelinePage({ repoId, pipelineId }: PipelinePageProps): JSX.Element {
+export function PipelinePage({ repoId, pipelineId }: PipelinePageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
   const qc = useQueryClient()
@@ -186,7 +186,7 @@ export function PipelinePage({ repoId, pipelineId }: PipelinePageProps): JSX.Ele
   )
 }
 
-function StatCard({ label, value }: { label: string; value: string }): JSX.Element {
+function StatCard({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-white/10 bg-white/5 px-3 py-2.5">
       <p className="text-xs text-neutral-600">{label}</p>
@@ -195,7 +195,7 @@ function StatCard({ label, value }: { label: string; value: string }): JSX.Eleme
   )
 }
 
-function Metric({ label, value, className }: { label: string; value: number; className?: string }): JSX.Element {
+function Metric({ label, value, className }: { label: string; value: number; className?: string }) {
   return (
     <div className="rounded-lg bg-black/20 px-2 py-2 text-center">
       <p className="text-[11px] text-neutral-600">{label}</p>

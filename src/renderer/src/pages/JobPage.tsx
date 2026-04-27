@@ -6,14 +6,14 @@ import { invoke, on } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { cn, formatRelativeTime, formatDuration, formatBytes } from '../lib/utils'
 import { parseAnsi } from '../lib/ansi'
-import { Loader2, PlayCircle, XCircle, Download, FileArchive } from 'lucide-react'
+import { Loader2, Download, FileArchive } from 'lucide-react'
 
 interface JobPageProps {
   repoId: number
   jobId: number
 }
 
-export function JobPage({ repoId, jobId }: JobPageProps): JSX.Element {
+export function JobPage({ repoId, jobId }: JobPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const qc = useQueryClient()
   const [log, setLog] = useState('')
@@ -190,7 +190,7 @@ export function JobPage({ repoId, jobId }: JobPageProps): JSX.Element {
   )
 }
 
-function DetailRow({ label, value }: { label: string; value: string }): JSX.Element {
+function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between rounded bg-white/5 px-2 py-1.5">
       <span className="text-neutral-500">{label}</span>
@@ -199,7 +199,7 @@ function DetailRow({ label, value }: { label: string; value: string }): JSX.Elem
   )
 }
 
-function AnsiLog({ text }: { text: string }): JSX.Element {
+function AnsiLog({ text }: { text: string }) {
   const segments = useMemo(() => parseAnsi(text), [text])
   return (
     <pre className="whitespace-pre-wrap break-words">

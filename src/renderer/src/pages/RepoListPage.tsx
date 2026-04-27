@@ -6,9 +6,9 @@ import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { cn, formatRelativeTime } from '../lib/utils'
-import { Search, Loader2, GitBranch, Star, Folder } from 'lucide-react'
+import { Search, Loader2, Star, Folder } from 'lucide-react'
 
-export function RepoListPage(): JSX.Element {
+export function RepoListPage() {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
   const [search, setSearch] = useState('')

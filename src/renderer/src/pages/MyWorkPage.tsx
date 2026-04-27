@@ -4,7 +4,7 @@ import { MergeRequest, Pipeline } from '@shared/types'
 import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
-import { formatRelativeTime, cn } from '../lib/utils'
+import { formatRelativeTime } from '../lib/utils'
 import { Loader2, GitPullRequest, GitBranch, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react'
 
 interface MyWorkData {
@@ -14,7 +14,7 @@ interface MyWorkData {
   myPipelines: Pipeline[]
 }
 
-function PipelineStatusIcon({ status }: { status: string }): JSX.Element {
+function PipelineStatusIcon({ status }: { status: string }) {
   const map: Record<string, { icon: React.ReactNode; className: string }> = {
     success: { icon: <CheckCircle2 size={14} />, className: 'text-status-success' },
     failed: { icon: <XCircle size={14} />, className: 'text-status-failed' },
@@ -26,7 +26,7 @@ function PipelineStatusIcon({ status }: { status: string }): JSX.Element {
   return <span className={entry.className}>{entry.icon}</span>
 }
 
-function MRRow({ mr, onOpen }: { mr: MergeRequest; onOpen: (mr: MergeRequest, newTab: boolean) => void }): JSX.Element {
+function MRRow({ mr, onOpen }: { mr: MergeRequest; onOpen: (mr: MergeRequest, newTab: boolean) => void }) {
   return (
     <button
       onClick={(e) => onOpen(mr, e.metaKey || e.ctrlKey)}
@@ -54,7 +54,7 @@ function Section({
   title: string
   count: number
   children: React.ReactNode
-}): JSX.Element {
+}) {
   return (
     <section className="mb-6">
       <div className="mb-2 flex items-center gap-2">
@@ -70,7 +70,7 @@ function Section({
   )
 }
 
-export function MyWorkPage(): JSX.Element {
+export function MyWorkPage() {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
 
@@ -109,7 +109,7 @@ export function MyWorkPage(): JSX.Element {
               routeState: { section: 'accounts' }
             })
           }
-          className="rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-black transition-colors hover:bg-accent-400"
+          className="app-button-primary rounded-lg px-4 py-2 text-sm font-medium"
         >
           Add account
         </button>

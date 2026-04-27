@@ -15,7 +15,7 @@ interface MRHeaderProps {
   merging: boolean
 }
 
-export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeaderProps): JSX.Element {
+export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeaderProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const [showMergeMenu, setShowMergeMenu] = useState(false)
 
@@ -63,7 +63,7 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
         <div className="flex flex-shrink-0 items-center gap-2">
           <button
             onClick={openInBrowser}
-            className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm text-neutral-400 transition-colors hover:bg-white/5"
+            className="app-button-secondary rounded-lg px-3 py-1.5 text-sm"
             title="Open in GitLab"
           >
             <ExternalLink size={13} />
@@ -91,7 +91,7 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
                       }
                     }}
                     disabled={merging}
-                    className="flex items-center gap-1.5 rounded-lg bg-accent-500 px-3 py-1.5 text-sm font-medium text-black transition-colors hover:bg-accent-400 disabled:opacity-50"
+                    className="app-button-primary rounded-lg px-3 py-1.5 text-sm font-medium"
                   >
                     {merging ? <Loader2 size={13} className="animate-spin" /> : <GitMerge size={13} />}
                     Merge
@@ -111,7 +111,6 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
                           {strategy === 'merge' && 'Merge commit'}
                           {strategy === 'squash' && 'Squash and merge'}
                           {strategy === 'rebase_merge' && 'Rebase merge'}
-                          {strategy === 'fast_forward' && 'Fast-forward merge'}
                         </button>
                       ))}
                     </div>

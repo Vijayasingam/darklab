@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron'
 import { IPC } from '../../shared/ipc-channels'
-import { IPCResult, AppNotification, NotificationPreferences, SnoozedMR, MutedRepo } from '../../shared/types'
+import { IPCResult, NotificationPreferences } from '../../shared/types'
 import { getDb } from '../services/db'
 import { getStore } from '../services/store'
 

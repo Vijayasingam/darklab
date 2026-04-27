@@ -8,7 +8,7 @@ import { useTabsStore } from '../../store/tabs'
 import { formatRelativeTime } from '../../lib/utils'
 import { useEffect } from 'react'
 
-export function NotificationPanel(): JSX.Element {
+export function NotificationPanel() {
   const open = useUIStore((s) => s.notificationPanelOpen)
   const close = useUIStore((s) => s.closeNotificationPanel)
   const accountId = useAccountStore((s) => s.activeAccountId)

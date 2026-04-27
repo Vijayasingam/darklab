@@ -19,7 +19,7 @@ const STATE_OPTIONS: { label: string; value: MRState | 'all' }[] = [
   { label: 'All', value: 'all' }
 ]
 
-export function MRListPage({ filters }: MRListPageProps): JSX.Element {
+export function MRListPage({ filters }: MRListPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
   const [state, setState] = useState<MRState | 'all'>('opened')

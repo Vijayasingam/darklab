@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'axios'
-import { retrieveToken, retrieveRefreshToken, storeToken } from '../../services/store'
+import { retrieveToken, retrieveRefreshToken } from '../../services/store'
 
 // Map of accountId → axios instance
 const instances = new Map<string, AxiosInstance>()

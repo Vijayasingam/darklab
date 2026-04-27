@@ -1,8 +1,8 @@
 import {
   Repo, MergeRequest, MRAuthor, Label, Milestone, DiffFile,
-  FilePair, Thread, ThreadPosition, Note, Pipeline, PipelineStatus,
-  PipelineTrigger, Stage, Job, Artifact, TestReport, TestSuite,
-  TestCase, ActivityEvent, ActivityEvent as AE
+  Thread, ThreadPosition, Note, Pipeline, PipelineStatus,
+  PipelineTrigger, Job, TestReport, TestSuite,
+  TestCase
 } from '../../../shared/types'
 
 // ---------------------------------------------------------------------------

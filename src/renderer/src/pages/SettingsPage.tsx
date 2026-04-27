@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
 import { invoke } from '../lib/ipc'
@@ -10,7 +10,7 @@ interface SettingsPageProps {
 
 const SECTIONS = ['accounts', 'notifications', 'appearance', 'updates', 'advanced'] as const
 
-export function SettingsPage({ section }: SettingsPageProps): JSX.Element {
+export function SettingsPage({ section }: SettingsPageProps) {
   const [active, setActive] = useState(section && SECTIONS.includes(section as never) ? section : 'accounts')
   const accountId = useAccountStore((s) => s.activeAccountId)
   const setActiveAccountId = useAccountStore((s) => s.setActiveAccountId)
@@ -115,7 +115,7 @@ function AccountsSection({
   onSwitch: (id: string) => void
   onRemove: (id: string) => void
   onAddPat: (payload: { baseUrl: string; pat: string }) => void
-}): JSX.Element {
+}) {
   const [baseUrl, setBaseUrl] = useState('https://gitlab.com')
   const [pat, setPat] = useState('')
 
@@ -129,19 +129,19 @@ function AccountsSection({
           <input
             value={baseUrl}
             onChange={(e) => setBaseUrl(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-base-900 px-3 py-2 text-sm text-neutral-200 outline-none"
+            className="app-input w-full rounded-lg px-3 py-2 text-sm"
             placeholder="https://gitlab.com"
           />
           <input
             value={pat}
             onChange={(e) => setPat(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-base-900 px-3 py-2 text-sm text-neutral-200 outline-none"
+            className="app-input w-full rounded-lg px-3 py-2 text-sm"
             placeholder="Personal access token"
           />
           <button
             onClick={() => onAddPat({ baseUrl, pat })}
             disabled={!pat.trim()}
-            className="rounded-lg bg-accent-500 px-3 py-1.5 text-sm font-medium text-black disabled:opacity-50"
+            className="app-button-primary rounded-lg px-3 py-1.5 text-sm font-medium"
           >
             Add account
           </button>

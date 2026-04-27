@@ -5,11 +5,8 @@ import { MergeRequest, DiffFile, Thread, MergeStrategy } from '@shared/types'
 import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
-import { cn, formatRelativeTime, formatDuration } from '../lib/utils'
-import {
-  Loader2, GitMerge, ChevronLeft, CheckCircle2, XCircle, AlertTriangle,
-  MessageSquare, GitPullRequest, RefreshCw, X
-} from 'lucide-react'
+import { cn, formatRelativeTime } from '../lib/utils'
+import { Loader2 } from 'lucide-react'
 import { DiffViewer } from '../components/mr/DiffViewer'
 import { ThreadList } from '../components/mr/ThreadList'
 import { MRHeader } from '../components/mr/MRHeader'
@@ -21,7 +18,7 @@ interface MRPageProps {
 
 type ActivePanel = 'overview' | 'changes' | 'threads' | 'pipelines'
 
-export function MRPage({ repoId, mrIid }: MRPageProps): JSX.Element {
+export function MRPage({ repoId, mrIid }: MRPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const qc = useQueryClient()
   const [activePanel, setActivePanel] = useState<ActivePanel>('overview')
@@ -167,7 +164,7 @@ export function MRPage({ repoId, mrIid }: MRPageProps): JSX.Element {
   )
 }
 
-function MROverview({ mr }: { mr: MergeRequest }): JSX.Element {
+function MROverview({ mr }: { mr: MergeRequest }) {
   return (
     <div className="flex-1 overflow-auto px-6 py-4">
       <div className="grid gap-6 lg:grid-cols-3">
@@ -255,7 +252,7 @@ function MROverview({ mr }: { mr: MergeRequest }): JSX.Element {
   )
 }
 
-function MRPipelines({ repoId, mr }: { repoId: number; mr: MergeRequest }): JSX.Element {
+function MRPipelines({ repoId, mr }: { repoId: number; mr: MergeRequest }) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
 

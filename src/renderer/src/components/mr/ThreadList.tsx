@@ -3,7 +3,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Thread, Note } from '@shared/types'
 import { invoke } from '../../lib/ipc'
 import { IPC } from '@shared/ipc-channels'
-import { useAccountStore } from '../../store/account'
 import { cn, formatRelativeTime } from '../../lib/utils'
 import { CheckCircle2, ChevronDown, ChevronRight, MessageSquare, Send } from 'lucide-react'
 
@@ -13,7 +12,7 @@ interface ThreadListProps {
   mrIid: number
 }
 
-export function ThreadList({ threads, repoId, mrIid }: ThreadListProps): JSX.Element {
+export function ThreadList({ threads, repoId, mrIid }: ThreadListProps) {
   if (threads.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-neutral-600">
@@ -57,8 +56,7 @@ export function ThreadList({ threads, repoId, mrIid }: ThreadListProps): JSX.Ele
   )
 }
 
-function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number; mrIid: number }): JSX.Element {
-  const accountId = useAccountStore((s) => s.activeAccountId)
+function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number; mrIid: number }) {
   const qc = useQueryClient()
   const [expanded, setExpanded] = useState(!thread.resolved)
   const [replyText, setReplyText] = useState('')
@@ -153,7 +151,7 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
               <button
                 onClick={() => replyMutation.mutate()}
                 disabled={!replyText.trim() || replyMutation.isPending}
-                className="flex-shrink-0 rounded-lg bg-accent-500 p-2 text-black disabled:opacity-50"
+                className="app-button-primary flex-shrink-0 rounded-lg p-2"
               >
                 <Send size={14} />
               </button>
@@ -165,7 +163,7 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
   )
 }
 
-function NoteItem({ note }: { note: Note }): JSX.Element {
+function NoteItem({ note }: { note: Note }) {
   return (
     <div className="mt-2.5 flex gap-2">
       <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-medium text-neutral-300">

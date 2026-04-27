@@ -3,7 +3,7 @@ import { useUIStore } from '../../store/ui'
 import { cn } from '../../lib/utils'
 import {
   LayoutDashboard, GitPullRequest, GitBranch, Bell,
-  Settings, Search, Layers, Activity, Plus
+  Settings, Search, Layers, Activity
 } from 'lucide-react'
 
 interface NavItem {
@@ -21,7 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { icon: <Layers size={18} />, label: 'Repositories', route: '/repos', type: 'repo-list' }
 ]
 
-export function IconRail(): JSX.Element {
+export function IconRail() {
   const openTab = useTabsStore((s) => s.openTab)
   const tabs = useTabsStore((s) => s.tabs)
   const activeTabId = useTabsStore((s) => s.activeTabId)

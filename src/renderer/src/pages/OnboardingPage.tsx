@@ -3,7 +3,7 @@ import { IPC } from '@shared/ipc-channels'
 import { invoke } from '../lib/ipc'
 import { useTabsStore } from '../store/tabs'
 
-export function OnboardingPage(): JSX.Element {
+export function OnboardingPage() {
   const openTab = useTabsStore((s) => s.openTab)
 
   const completeMutation = useMutation({
@@ -30,13 +30,13 @@ export function OnboardingPage(): JSX.Element {
               routeState: { section: 'accounts' }
             })
           }
-          className="mr-2 rounded-lg border border-white/15 px-4 py-2 text-sm text-neutral-200 hover:bg-white/5"
+          className="app-button-secondary mr-2 rounded-lg px-4 py-2 text-sm font-medium"
         >
           Add account
         </button>
         <button
           onClick={() => completeMutation.mutate()}
-          className="rounded-lg bg-accent-500 px-4 py-2 text-sm font-medium text-black"
+          className="app-button-primary rounded-lg px-4 py-2 text-sm font-medium"
         >
           Continue
         </button>

@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
-import { AppTab, TabType, TabRouteState } from '@shared/types'
+import { AppTab } from '@shared/types'
 
 interface TabsState {
   tabs: AppTab[]
@@ -36,7 +36,7 @@ export const useTabsStore = create<TabsState>()(
       activeTabId: null,
 
       openTab(tab, opts) {
-        const { tabs, activeTabId } = get()
+        const { activeTabId } = get()
         const isNewTab = opts?.newTab ?? false
 
         // If not new tab — update the current active tab in place

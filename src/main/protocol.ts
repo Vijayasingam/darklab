@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app } from 'electron'
 import { getMainWindow } from './window'
 
 const PROTOCOL = 'darkgit'

@@ -12,7 +12,7 @@ const COMMANDS = [
   { id: 'settings', label: 'Open Settings', route: '/settings', type: 'settings' }
 ]
 
-export function CommandCenter(): JSX.Element {
+export function CommandCenter() {
   const open = useUIStore((s) => s.commandCenterOpen)
   const close = useUIStore((s) => s.closeCommandCenter)
   const openTab = useTabsStore((s) => s.openTab)

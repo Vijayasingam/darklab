@@ -4,7 +4,7 @@ import { DiffFile, FilePair, Thread } from '@shared/types'
 import { invoke } from '../../lib/ipc'
 import { useAccountStore } from '../../store/account'
 import { Loader2 } from 'lucide-react'
-import MonacoDiffEditor from '@monaco-editor/react'
+import { DiffEditor } from '@monaco-editor/react'
 
 interface DiffViewerProps {
   repoId: number
@@ -13,7 +13,7 @@ interface DiffViewerProps {
   threads: Thread[]
 }
 
-export function DiffViewer({ repoId, mrIid, file, threads }: DiffViewerProps): JSX.Element {
+export function DiffViewer({ repoId, mrIid, file, threads: _threads }: DiffViewerProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
 
   const { data: pair, isLoading } = useQuery<FilePair>({
@@ -45,7 +45,7 @@ export function DiffViewer({ repoId, mrIid, file, threads }: DiffViewerProps): J
 
   return (
     <div className="h-full overflow-hidden">
-      <MonacoDiffEditor
+      <DiffEditor
         height="100%"
         language={pair.language}
         original={pair.original}
@@ -53,14 +53,12 @@ export function DiffViewer({ repoId, mrIid, file, threads }: DiffViewerProps): J
         theme="vs-dark"
         options={{
           readOnly: true,
-          renderSideBySide: true,
           fontSize: 13,
           fontFamily: '"JetBrains Mono", "Fira Code", "Cascadia Code", Menlo, monospace',
           lineNumbers: 'on',
           minimap: { enabled: false },
           scrollBeyondLastLine: false,
           wordWrap: 'off',
-          diffWordWrap: 'off',
           scrollbar: {
             verticalScrollbarSize: 6,
             horizontalScrollbarSize: 6

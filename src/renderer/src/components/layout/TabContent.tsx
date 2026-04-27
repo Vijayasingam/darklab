@@ -15,7 +15,7 @@ const ActivityPage = lazy(() => import('../../pages/ActivityPage').then((m) => (
 const SettingsPage = lazy(() => import('../../pages/SettingsPage').then((m) => ({ default: m.SettingsPage })))
 const OnboardingPage = lazy(() => import('../../pages/OnboardingPage').then((m) => ({ default: m.OnboardingPage })))
 
-function PageLoader(): JSX.Element {
+function PageLoader() {
   return (
     <div className="flex h-full items-center justify-center text-neutral-600">
       <Loader2 size={20} className="animate-spin" />
@@ -23,7 +23,7 @@ function PageLoader(): JSX.Element {
   )
 }
 
-export function TabContent(): JSX.Element {
+export function TabContent() {
   const tabs = useTabsStore((s) => s.tabs)
   const activeTabId = useTabsStore((s) => s.activeTabId)
 
@@ -44,7 +44,15 @@ export function TabContent(): JSX.Element {
   )
 }
 
-function RouteView({ route, state }: { route: string; state: Record<string, unknown> }): JSX.Element {
+function RouteView({ route, state }: { route?: string; state: Record<string, unknown> }) {
+  if (!route) {
+    return (
+      <div className="flex h-full items-center justify-center text-sm text-neutral-600">
+        No route selected
+      </div>
+    )
+  }
+
   if (route === '/my-work') return <MyWorkPage />
   if (route === '/repos') return <RepoListPage />
   if (route.startsWith('/repos/')) return <RepoPage repoId={state['repoId'] as number} repoPath={state['repoPath'] as string} />

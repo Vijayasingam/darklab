@@ -5,14 +5,12 @@ import {
   Pipeline, Stage, Job, Artifact, TestReport, ActivityEvent,
   MergeStrategy
 } from '../../../shared/types'
-import { createApiClient, getApiClient } from './api'
+import { createApiClient } from './api'
 import {
   transformRepo, transformMR, transformDiffFile, transformThread,
   transformPipeline, transformJob, transformTestReport
 } from './transforms'
 import axios from 'axios'
-import { app } from 'electron'
-import { join } from 'path'
 import * as fs from 'fs'
 
 // Language detection from file extension (lightweight, no extra dep)
@@ -547,7 +545,7 @@ export class GitLabProvider implements IGitProvider {
       }
     )
 
-    const totalLength = parseInt(response.headers['content-length'] ?? '0', 10)
+    const totalLength = parseInt(String(response.headers['content-length'] ?? '0'), 10)
     let downloaded = 0
 
     const writer = fs.createWriteStream(destPath)

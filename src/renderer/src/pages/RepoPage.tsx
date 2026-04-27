@@ -5,14 +5,14 @@ import { invoke } from '../lib/ipc'
 import { useTabsStore } from '../store/tabs'
 import { useAccountStore } from '../store/account'
 import { cn, formatRelativeTime } from '../lib/utils'
-import { Loader2, GitPullRequest, GitBranch, Star, Activity } from 'lucide-react'
+import { Loader2, GitPullRequest, GitBranch, Activity } from 'lucide-react'
 
 interface RepoPageProps {
   repoId: number
   repoPath: string
 }
 
-export function RepoPage({ repoId, repoPath }: RepoPageProps): JSX.Element {
+export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
 

@@ -11,7 +11,7 @@ interface ActivityPageProps {
   repoId?: number
 }
 
-export function ActivityPage({ repoId }: ActivityPageProps): JSX.Element {
+export function ActivityPage({ repoId }: ActivityPageProps) {
   const accountId = useAccountStore((s) => s.activeAccountId)
   const openTab = useTabsStore((s) => s.openTab)
 

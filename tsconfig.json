@@ -1,8 +1,10 @@
 {
-  "extends": "@electron-toolkit/tsconfig/tsconfig.json",
-  "files": [],
+  "extends": "./tsconfig.web.json",
+  "include": [
+    "src/renderer/src/**/*",
+    "src/shared/**/*"
+  ],
   "references": [
-    { "path": "./tsconfig.node.json" },
-    { "path": "./tsconfig.web.json" }
+    { "path": "./tsconfig.node.json" }
   ]
 }

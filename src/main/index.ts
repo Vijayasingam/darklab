@@ -1,5 +1,4 @@
 import { app, BrowserWindow, globalShortcut, shell } from 'electron'
-import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { createWindow, getMainWindow } from './window'
 import { createTray } from './tray'
