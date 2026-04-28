@@ -455,29 +455,3 @@ export type TabRouteState =
 
 export type SettingsSection = 'accounts' | 'notifications' | 'appearance' | 'updates' | 'advanced'
 
-// ---------------------------------------------------------------------------
-// Repo Collections
-// ---------------------------------------------------------------------------
-
-export interface RepoCollection {
-  id: string
-  name: string
-  color: string // hex
-  repoIds: number[] // repoId values belonging to this collection
-}
-
-// ---------------------------------------------------------------------------
-// Draft Review
-// ---------------------------------------------------------------------------
-
-export interface DraftComment {
-  id: string // local-only, not submitted yet
-  mrIid: number
-  repoId: number
-  accountId: string
-  body: string
-  position: ThreadPosition | null
-  createdAt: string
-}
-
-
