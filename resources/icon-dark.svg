@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" shape-rendering="geometricPrecision">
+  <defs>
+    <!-- Background radial gradient: deep dark purple centre -->
+    <radialGradient id="bg" cx="50%" cy="50%" r="70%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#1a1030"/>
+      <stop offset="100%" stop-color="#08060f"/>
+    </radialGradient>
+
+    <!-- Path glow / neon trail -->
+    <linearGradient id="pathGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9b5cf6"/>
+      <stop offset="50%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </linearGradient>
+
+    <!-- Top node fill -->
+    <radialGradient id="nodeTop" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="60%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </radialGradient>
+
+    <!-- Middle node fill -->
+    <radialGradient id="nodeMid" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="60%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </radialGradient>
+
+    <!-- Bottom node fill -->
+    <radialGradient id="nodeBot" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#c4b5fd"/>
+      <stop offset="60%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6d28d9"/>
+    </radialGradient>
+
+    <!-- Drop shadow filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="nodeGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Full-bleed background — macOS dock applies squircle mask, do NOT pre-round -->
+  <rect width="512" height="512" fill="url(#bg)"/>
+
+  <!--
+    Artwork inside a ~260×260 area centred at (256,256).
+    Node A (top-left):   (186, 188)
+    Node B (mid-right):  (326, 256)
+    Node C (bot-left):   (186, 324)
+  -->
+
+  <!-- S-curve path -->
+  <path
+    d="M 186,188
+       C 186,238 326,215 326,256
+       C 326,297 186,274 186,324"
+    fill="none"
+    stroke="url(#pathGrad)"
+    stroke-width="20"
+    stroke-linecap="round"
+    filter="url(#glow)"
+  />
+
+  <!-- Node A — top left -->
+  <circle cx="186" cy="188" r="30" fill="url(#nodeTop)" filter="url(#nodeGlow)"/>
+  <circle cx="178" cy="180" r="9" fill="white" opacity="0.28"/>
+
+  <!-- Node B — middle right -->
+  <circle cx="326" cy="256" r="24" fill="url(#nodeMid)" filter="url(#nodeGlow)"/>
+  <circle cx="319" cy="249" r="7" fill="white" opacity="0.28"/>
+
+  <!-- Node C — bottom left -->
+  <circle cx="186" cy="324" r="30" fill="url(#nodeBot)" filter="url(#nodeGlow)"/>
+  <circle cx="178" cy="316" r="9" fill="white" opacity="0.28"/>
+</svg>

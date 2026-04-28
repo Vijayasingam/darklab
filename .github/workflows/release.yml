@@ -108,5 +108,5 @@ jobs:
         run: |
           gh release edit "$GITHUB_REF_NAME" \
             --draft=false \
-            --title "dark-git ${{ steps.version.outputs.version }}" \
+            --title "Darklab ${{ steps.version.outputs.version }}" \
             --generate-notes

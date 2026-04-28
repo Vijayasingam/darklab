@@ -1,3 +1,5 @@
+import { TypographyH1, TypographyH2, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
 import { Repo, MergeRequest, Pipeline } from '@shared/types'
@@ -77,13 +79,13 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
             <GitBranch size={18} className="text-accent-400" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold text-neutral-100">{repo.fullPath}</h1>
+            <TypographyH1 className="text-xl font-semibold text-neutral-100">{repo.fullPath}</TypographyH1>
             {repo.description && (
-              <p className="mt-1 text-sm text-neutral-500">{repo.description}</p>
+              <TypographyP className="mt-1 text-sm text-neutral-500">{repo.description}</TypographyP>
             )}
           </div>
           <div className="ml-auto flex items-center gap-2">
-            <button
+            <Button
               onClick={() =>
                 openTab({
                   type: 'mr-list' as never,
@@ -93,12 +95,13 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
                   routeState: { filters: { repoId } }
                 })
               }
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm text-neutral-300 transition-colors hover:bg-white/5"
+              variant="outline"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm"
             >
               <GitPullRequest size={14} />
               Merge Requests
-            </button>
-            <button
+            </Button>
+            <Button
               onClick={() =>
                 openTab({
                   type: 'pipeline-list' as never,
@@ -108,51 +111,54 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
                   routeState: { filters: { repoId } }
                 })
               }
-              className="flex items-center gap-1.5 rounded-lg border border-white/10 px-3 py-1.5 text-sm text-neutral-300 transition-colors hover:bg-white/5"
+              variant="outline"
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm"
             >
               <Activity size={14} />
               Pipelines
-            </button>
+            </Button>
           </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Open MRs */}
           <section>
-            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
               Open merge requests
-            </h2>
+            </TypographyH2>
             <div className="space-y-0.5">
               {(mrs ?? []).slice(0, 10).map((mr) => (
-                <button
+                <Button
                   key={mr.id}
                   onClick={(e) => openMR(mr, e.metaKey || e.ctrlKey)}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
+                  variant="ghost"
+                  className="flex h-auto w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
                 >
                   <GitPullRequest size={13} className="flex-shrink-0 text-accent-400" />
-                  <span className="flex-1 truncate text-sm text-neutral-200">{mr.title}</span>
-                  <span className="flex-shrink-0 text-xs text-neutral-600">!{mr.iid}</span>
-                </button>
+                  <TypographySpan className="flex-1 truncate text-sm text-neutral-200">{mr.title}</TypographySpan>
+                  <TypographySpan className="flex-shrink-0 text-xs text-neutral-600">!{mr.iid}</TypographySpan>
+                </Button>
               ))}
               {(mrs ?? []).length === 0 && (
-                <p className="py-4 text-center text-sm text-neutral-600">No open MRs</p>
+                <TypographyP className="py-4 text-center text-sm text-neutral-600">No open MRs</TypographyP>
               )}
             </div>
           </section>
 
           {/* Recent pipelines */}
           <section>
-            <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
               Recent pipelines
-            </h2>
+            </TypographyH2>
             <div className="space-y-0.5">
               {(pipelines ?? []).slice(0, 10).map((p) => (
-                <button
+                <Button
                   key={p.id}
                   onClick={(e) => openPipeline(p, e.metaKey || e.ctrlKey)}
-                  className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
+                  variant="ghost"
+                  className="flex h-auto w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
                 >
-                  <span
+                  <TypographySpan
                     className={cn(
                       'flex-shrink-0 text-xs font-medium',
                       p.status === 'success' && 'text-status-success',
@@ -162,13 +168,13 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
                     )}
                   >
                     {p.status}
-                  </span>
-                  <span className="flex-1 truncate text-sm text-neutral-300">{p.ref}</span>
-                  <span className="flex-shrink-0 text-xs text-neutral-600">{formatRelativeTime(p.updatedAt)}</span>
-                </button>
+                  </TypographySpan>
+                  <TypographySpan className="flex-1 truncate text-sm text-neutral-300">{p.ref}</TypographySpan>
+                  <TypographySpan className="flex-shrink-0 text-xs text-neutral-600">{formatRelativeTime(p.updatedAt)}</TypographySpan>
+                </Button>
               ))}
               {(pipelines ?? []).length === 0 && (
-                <p className="py-4 text-center text-sm text-neutral-600">No pipelines</p>
+                <TypographyP className="py-4 text-center text-sm text-neutral-600">No pipelines</TypographyP>
               )}
             </div>
           </section>

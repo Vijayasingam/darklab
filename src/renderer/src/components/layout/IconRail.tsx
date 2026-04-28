@@ -1,6 +1,7 @@
 import { useTabsStore } from '../../store/tabs'
 import { useUIStore } from '../../store/ui'
 import { cn } from '../../lib/utils'
+import { Button } from '../ui/button'
 import {
   LayoutDashboard, GitPullRequest, GitBranch, Bell,
   Settings, Search, Layers, Activity
@@ -41,13 +42,15 @@ export function IconRail() {
       <div className="h-8 w-full" />
 
       {/* Search / Command center */}
-      <button
+      <Button
         onClick={openCommandCenter}
-        className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-200 no-drag"
+        variant="ghost"
+        size="icon"
+        className="no-drag mb-3 h-9 w-9 text-neutral-500 hover:text-neutral-200"
         title="Command Center (⌘K)"
       >
         <Search size={16} />
-      </button>
+      </Button>
 
       <div className="mx-auto mb-2 h-px w-7 bg-white/10" />
 
@@ -56,19 +59,21 @@ export function IconRail() {
         {NAV_ITEMS.map((item) => {
           const isActive = activeTab?.route === item.route
           return (
-            <button
+            <Button
               key={item.route}
               onClick={(e) => navigate(item, e)}
               title={item.label}
+              variant="ghost"
+              size="icon"
               className={cn(
-                'flex h-9 w-9 items-center justify-center rounded-lg transition-colors',
+                'h-9 w-9 rounded-lg',
                 isActive
                   ? 'bg-accent-500/15 text-accent-400'
-                  : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-200'
+                  : 'text-neutral-500 hover:text-neutral-200'
               )}
             >
               {item.icon}
-            </button>
+            </Button>
           )
         })}
       </nav>
@@ -77,22 +82,26 @@ export function IconRail() {
       <div className="flex-1" />
 
       {/* Notifications */}
-      <button
+      <Button
         onClick={openNotificationPanel}
         title="Notifications"
-        className="no-drag mb-1 flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-200"
+        variant="ghost"
+        size="icon"
+        className="no-drag mb-1 h-9 w-9 text-neutral-500 hover:text-neutral-200"
       >
         <Bell size={16} />
-      </button>
+      </Button>
 
       {/* Settings */}
-      <button
+      <Button
         onClick={() => openTab({ type: 'settings' as never, title: 'Settings', icon: '', route: '/settings', routeState: {} })}
         title="Settings"
-        className="no-drag mb-2 flex h-9 w-9 items-center justify-center rounded-lg text-neutral-500 transition-colors hover:bg-white/5 hover:text-neutral-200"
+        variant="ghost"
+        size="icon"
+        className="no-drag mb-2 h-9 w-9 text-neutral-500 hover:text-neutral-200"
       >
         <Settings size={16} />
-      </button>
+      </Button>
     </aside>
   )
 }

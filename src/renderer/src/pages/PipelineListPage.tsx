@@ -1,3 +1,6 @@
+import { TypographyH1, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -40,24 +43,17 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-4xl px-6 py-6">
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-neutral-100">Pipelines</h1>
+          <TypographyH1 className="text-xl font-semibold text-neutral-100">Pipelines</TypographyH1>
 
-          <div className="flex items-center gap-1 rounded-lg bg-white/5 p-1">
-            {STATUS_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setStatus(opt.value)}
-                className={cn(
-                  'rounded px-3 py-1 text-sm transition-colors',
-                  status === opt.value
-                    ? 'bg-white/10 text-neutral-100'
-                    : 'text-neutral-500 hover:text-neutral-300'
-                )}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <Tabs value={status} onValueChange={(v) => setStatus(v as PipelineStatus | 'all')} className="w-auto">
+            <TabsList variant="compact">
+              {STATUS_OPTIONS.map((opt) => (
+                <TabsTrigger key={opt.value} value={opt.value} variant="compact">
+                  {opt.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
 
         {isLoading ? (
@@ -67,7 +63,7 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
         ) : (
           <div className="space-y-0.5">
             {(pipelines ?? []).map((p) => (
-              <button
+              <Button
                 key={p.id}
                 onClick={(e) =>
                   openTab(
@@ -81,9 +77,10 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
                     { newTab: e.metaKey || e.ctrlKey }
                   )
                 }
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left hover:bg-white/5"
+                variant="ghost"
+                className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-3 text-left hover:bg-white/5"
               >
-                <span
+                <TypographySpan
                   className={cn(
                     'w-[72px] flex-shrink-0 text-sm font-medium',
                     p.status === 'success' && 'text-status-success',
@@ -94,21 +91,21 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
                   )}
                 >
                   {p.status}
-                </span>
+                </TypographySpan>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-neutral-200">
+                  <TypographyP className="truncate text-sm text-neutral-200">
                     #{p.id} · {p.ref}
-                  </p>
-                  <p className="mt-0.5 text-xs text-neutral-500">{p.repoFullPath || `repo:${p.repoId}`}</p>
+                  </TypographyP>
+                  <TypographyP className="mt-0.5 text-xs text-neutral-500">{p.repoFullPath || `repo:${p.repoId}`}</TypographyP>
                 </div>
                 <div className="flex-shrink-0 text-right text-xs text-neutral-600">
-                  <p>{formatDuration(p.duration)}</p>
-                  <p>{formatRelativeTime(p.updatedAt)}</p>
+                  <TypographyP>{formatDuration(p.duration)}</TypographyP>
+                  <TypographyP>{formatRelativeTime(p.updatedAt)}</TypographyP>
                 </div>
-              </button>
+              </Button>
             ))}
             {(pipelines ?? []).length === 0 && (
-              <p className="py-8 text-center text-sm text-neutral-600">No pipelines</p>
+              <TypographyP className="py-8 text-center text-sm text-neutral-600">No pipelines</TypographyP>
             )}
           </div>
         )}

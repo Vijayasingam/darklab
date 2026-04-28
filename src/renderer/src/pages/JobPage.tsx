@@ -1,3 +1,5 @@
+import { TypographyH1, TypographyH2, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
 import { useEffect, useMemo, useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -98,12 +100,12 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
       <div className="flex flex-1 flex-col overflow-hidden">
         <div className="flex flex-shrink-0 items-start gap-3 border-b border-white/5 px-6 py-4">
           <div className="min-w-0 flex-1">
-            <h1 className="text-lg font-semibold text-neutral-100">{job.name}</h1>
-            <p className="mt-1 text-xs text-neutral-500">
+            <TypographyH1 className="text-lg font-semibold text-neutral-100">{job.name}</TypographyH1>
+            <TypographyP className="mt-1 text-xs text-neutral-500">
               Stage: {job.stage} · #{job.id} · updated {formatRelativeTime(job.createdAt)}
-            </p>
+            </TypographyP>
           </div>
-          <span
+          <TypographySpan
             className={cn(
               'rounded px-2 py-1 text-xs font-medium',
               job.status === 'success' && 'bg-status-success/15 text-status-success',
@@ -113,26 +115,26 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
             )}
           >
             {job.status}
-          </span>
-          <button
+          </TypographySpan>
+          <Button
             onClick={() => retryMutation.mutate()}
-            className="rounded-lg border border-white/10 px-3 py-1.5 text-sm text-neutral-300 hover:bg-white/5"
+            variant="outline"
           >
             Retry
-          </button>
+          </Button>
           {(job.status === 'running' || job.status === 'pending') && (
-            <button
+            <Button
               onClick={() => cancelMutation.mutate()}
-              className="rounded-lg border border-status-failed/30 px-3 py-1.5 text-sm text-status-failed hover:bg-status-failed/10"
+              variant="destructive"
             >
               Cancel
-            </button>
+            </Button>
           )}
         </div>
 
         <div className="flex-1 overflow-auto bg-[#0b0f14] px-4 py-3 font-mono text-xs leading-relaxed">
           {log.length === 0 ? (
-            <p className="text-neutral-600">Waiting for log stream…</p>
+            <TypographyP className="text-neutral-600">Waiting for log stream…</TypographyP>
           ) : (
             <AnsiLog text={log} />
           )}
@@ -142,7 +144,7 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
       {/* Right sidebar */}
       <aside className="w-[280px] flex-shrink-0 overflow-auto border-l border-white/5 bg-base-900 px-4 py-4">
         <section className="mb-6">
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Details</h2>
+          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Details</TypographyH2>
           <div className="space-y-1 text-sm">
             <DetailRow label="Status" value={job.status} />
             <DetailRow label="Stage" value={job.stage} />
@@ -152,23 +154,25 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
         </section>
 
         <section>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Artifacts</h2>
+          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Artifacts</TypographyH2>
           <div className="space-y-2">
             {(artifacts ?? []).map((artifact) => (
               <div key={artifact.id} className="rounded-lg border border-white/10 p-2.5">
                 <div className="flex items-start gap-2">
                   <FileArchive size={14} className="mt-0.5 flex-shrink-0 text-neutral-500" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-neutral-300">{artifact.filename}</p>
-                    <p className="text-xs text-neutral-600">{formatBytes(artifact.size)}</p>
+                    <TypographyP className="truncate text-sm text-neutral-300">{artifact.filename}</TypographyP>
+                    <TypographyP className="text-xs text-neutral-600">{formatBytes(artifact.size)}</TypographyP>
                   </div>
-                  <button
+                  <Button
                     onClick={() => downloadMutation.mutate(artifact)}
-                    className="rounded p-1 text-neutral-500 hover:bg-white/5 hover:text-neutral-300"
+                    variant="ghost"
+                    size="icon"
+                    className="h-6 w-6 rounded p-1 text-neutral-500 hover:bg-white/5 hover:text-neutral-300"
                     title="Download artifact"
                   >
                     <Download size={13} />
-                  </button>
+                  </Button>
                 </div>
                 {progress[artifact.id] != null && progress[artifact.id] < 100 && (
                   <div className="mt-2 h-1 overflow-hidden rounded bg-white/10">
@@ -181,7 +185,7 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
               </div>
             ))}
             {(artifacts ?? []).length === 0 && (
-              <p className="text-sm text-neutral-600">No artifacts</p>
+              <TypographyP className="text-sm text-neutral-600">No artifacts</TypographyP>
             )}
           </div>
         </section>
@@ -193,8 +197,8 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between rounded bg-white/5 px-2 py-1.5">
-      <span className="text-neutral-500">{label}</span>
-      <span className="text-neutral-300">{value}</span>
+      <TypographySpan className="text-neutral-500">{label}</TypographySpan>
+      <TypographySpan className="text-neutral-300">{value}</TypographySpan>
     </div>
   )
 }
@@ -204,7 +208,7 @@ function AnsiLog({ text }: { text: string }) {
   return (
     <pre className="whitespace-pre-wrap break-words">
       {segments.map((seg, i) => (
-        <span key={i} className={seg.className}>{seg.text}</span>
+        <TypographySpan key={i} className={seg.className}>{seg.text}</TypographySpan>
       ))}
     </pre>
   )

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { useTabsStore } from '../../store/tabs'
-import { Loader2 } from 'lucide-react'
+import { Skeleton } from '../ui/skeleton'
 
 // Lazy-loaded pages
 const MyWorkPage = lazy(() => import('../../pages/MyWorkPage').then((m) => ({ default: m.MyWorkPage })))
@@ -17,8 +17,10 @@ const OnboardingPage = lazy(() => import('../../pages/OnboardingPage').then((m) 
 
 function PageLoader() {
   return (
-    <div className="flex h-full items-center justify-center text-neutral-600">
-      <Loader2 size={20} className="animate-spin" />
+    <div className="p-6">
+      <Skeleton className="mb-3 h-8 w-56 rounded" />
+      <Skeleton className="mb-2 h-4 w-96 rounded" />
+      <Skeleton className="h-[70vh] w-full rounded-xl" />
     </div>
   )
 }

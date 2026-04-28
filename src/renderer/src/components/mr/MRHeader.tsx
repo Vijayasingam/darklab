@@ -1,3 +1,5 @@
+import { TypographyH1, TypographyP, TypographySpan } from '../ui/typography'
+import { Button } from '../ui/button'
 import { MergeRequest, MergeStrategy } from '@shared/types'
 import { cn, formatRelativeTime } from '../../lib/utils'
 import { invoke } from '../../lib/ipc'
@@ -36,7 +38,7 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
       <div className="flex items-start gap-3">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span
+            <TypographySpan
               className={cn(
                 'rounded px-2 py-0.5 text-xs font-medium',
                 mr.state === 'opened' && 'bg-status-success/15 text-status-success',
@@ -45,44 +47,47 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
               )}
             >
               {mr.state}
-            </span>
+            </TypographySpan>
             {mr.isDraft && (
-              <span className="rounded bg-white/5 px-2 py-0.5 text-xs text-neutral-500">Draft</span>
+              <TypographySpan className="rounded bg-white/5 px-2 py-0.5 text-xs text-neutral-500">Draft</TypographySpan>
             )}
           </div>
-          <h1 className="mt-1.5 text-lg font-semibold leading-snug text-neutral-100 line-clamp-2">
+          <TypographyH1 className="mt-1.5 text-lg font-semibold leading-snug text-neutral-100 line-clamp-2">
             {mr.title}
-          </h1>
-          <p className="mt-1 text-xs text-neutral-500">
+          </TypographyH1>
+          <TypographyP className="mt-1 text-xs text-neutral-500">
             !{mr.iid} · opened by {mr.author.name} · {formatRelativeTime(mr.createdAt)}
             {mr.threadCount > 0 && ` · ${mr.unresolvedThreadCount}/${mr.threadCount} threads`}
-          </p>
+          </TypographyP>
         </div>
 
         {/* Actions */}
         <div className="flex flex-shrink-0 items-center gap-2">
-          <button
+          <Button
             onClick={openInBrowser}
-            className="app-button-secondary rounded-lg px-3 py-1.5 text-sm"
+            variant="secondary"
+            size="sm"
             title="Open in GitLab"
           >
             <ExternalLink size={13} />
-          </button>
+          </Button>
 
           {mr.state === 'opened' && (
             <>
-              <button
+              <Button
                 onClick={onApprove}
                 disabled={approving}
-                className="flex items-center gap-1.5 rounded-lg border border-status-success/30 px-3 py-1.5 text-sm text-status-success transition-colors hover:bg-status-success/10 disabled:opacity-50"
+                variant="outline"
+                size="sm"
+                className="border-status-success/30 text-status-success hover:bg-status-success/10"
               >
                 {approving ? <Loader2 size={13} className="animate-spin" /> : <CheckCircle2 size={13} />}
                 Approve
-              </button>
+              </Button>
 
               {canMerge && (
                 <div className="relative">
-                  <button
+                  <Button
                     onClick={() => {
                       if (mergeOptions.length === 1) {
                         onMerge(mergeOptions[0])
@@ -91,27 +96,29 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
                       }
                     }}
                     disabled={merging}
-                    className="app-button-primary rounded-lg px-3 py-1.5 text-sm font-medium"
+                    size="sm"
+                    className="px-3 py-1.5 text-sm font-medium"
                   >
                     {merging ? <Loader2 size={13} className="animate-spin" /> : <GitMerge size={13} />}
                     Merge
-                  </button>
+                  </Button>
 
                   {showMergeMenu && (
                     <div className="absolute right-0 top-full z-50 mt-1 min-w-[160px] rounded-lg border border-white/10 bg-base-800 p-1 shadow-xl">
                       {mergeOptions.map((strategy) => (
-                        <button
+                        <Button
                           key={strategy}
                           onClick={() => {
                             setShowMergeMenu(false)
                             onMerge(strategy)
                           }}
-                          className="w-full rounded px-3 py-2 text-left text-sm text-neutral-200 hover:bg-white/5"
+                          variant="ghost"
+                          className="h-auto w-full rounded px-3 py-2 text-left text-sm text-neutral-200 hover:bg-white/5"
                         >
                           {strategy === 'merge' && 'Merge commit'}
                           {strategy === 'squash' && 'Squash and merge'}
                           {strategy === 'rebase_merge' && 'Rebase merge'}
-                        </button>
+                        </Button>
                       ))}
                     </div>
                   )}
@@ -135,12 +142,13 @@ export function MRHeader({ mr, onApprove, onMerge, approving, merging }: MRHeade
         >
           Pipeline: {mr.pipelineStatus}
           {mr.pipelineWebUrl && (
-            <button
+            <Button
               onClick={() => invoke<void>(IPC.APP.OPEN_EXTERNAL, mr.pipelineWebUrl!)}
-              className="ml-auto text-xs opacity-70 hover:opacity-100"
+              variant="link"
+              className="ml-auto h-auto text-xs opacity-70 hover:opacity-100"
             >
               View
-            </button>
+            </Button>
           )}
         </div>
       )}

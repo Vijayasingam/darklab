@@ -1,3 +1,6 @@
+import { TypographyH2, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -80,21 +83,16 @@ export function MRPage({ repoId, mrIid }: MRPageProps) {
       />
 
       {/* Panel nav */}
-      <div className="flex flex-shrink-0 items-center gap-0 border-b border-white/5 px-6">
-        {PANELS.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => setActivePanel(p.id)}
-            className={cn(
-              'relative border-b-2 px-4 py-2.5 text-sm transition-colors',
-              activePanel === p.id
-                ? 'border-accent-500 text-neutral-100'
-                : 'border-transparent text-neutral-500 hover:text-neutral-300'
-            )}
-          >
-            {p.label}
-          </button>
-        ))}
+      <div className="flex flex-shrink-0 items-center border-b border-white/5 px-6 py-1.5">
+        <Tabs value={activePanel} onValueChange={(v) => setActivePanel(v as ActivePanel)} className="w-auto">
+          <TabsList variant="compact">
+            {PANELS.map((p) => (
+              <TabsTrigger key={p.id} value={p.id} variant="compact">
+                {p.label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
       </div>
 
       {/* Panel content */}
@@ -106,17 +104,18 @@ export function MRPage({ repoId, mrIid }: MRPageProps) {
             {/* File tree */}
             <div className="w-64 flex-shrink-0 overflow-auto border-r border-white/5 py-2">
               {(diffFiles ?? []).map((file) => (
-                <button
+                <Button
                   key={file.newPath}
                   onClick={() => setSelectedFile(file)}
+                  variant="ghost"
                   className={cn(
-                    'flex w-full items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors',
+                    'flex h-auto w-full items-center gap-2 px-3 py-1.5 text-left text-xs transition-colors',
                     selectedFile?.newPath === file.newPath
                       ? 'bg-white/5 text-neutral-100'
                       : 'text-neutral-400 hover:bg-white/5'
                   )}
                 >
-                  <span
+                  <TypographySpan
                     className={cn(
                       'flex-shrink-0 rounded px-1 text-xs font-mono',
                       file.isNew && 'bg-status-success/10 text-status-success',
@@ -126,9 +125,9 @@ export function MRPage({ repoId, mrIid }: MRPageProps) {
                     )}
                   >
                     {file.isNew ? '+' : file.isDeleted ? '−' : file.isRenamed ? 'R' : 'M'}
-                  </span>
-                  <span className="truncate">{file.newPath.split('/').pop()}</span>
-                </button>
+                  </TypographySpan>
+                  <TypographySpan className="truncate">{file.newPath.split('/').pop()}</TypographySpan>
+                </Button>
               ))}
             </div>
 
@@ -170,22 +169,22 @@ function MROverview({ mr }: { mr: MergeRequest }) {
       <div className="grid gap-6 lg:grid-cols-3">
         {/* Description */}
         <div className="lg:col-span-2">
-          <h2 className="mb-3 text-sm font-medium text-neutral-400">Description</h2>
+          <TypographyH2 className="mb-3 text-sm font-medium text-neutral-400">Description</TypographyH2>
           {mr.description ? (
             <div className="prose prose-sm prose-invert max-w-none">
-              <p className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">
+              <TypographyP className="text-sm text-neutral-300 leading-relaxed whitespace-pre-wrap">
                 {mr.description}
-              </p>
+              </TypographyP>
             </div>
           ) : (
-            <p className="text-sm text-neutral-600">No description</p>
+            <TypographyP className="text-sm text-neutral-600">No description</TypographyP>
           )}
         </div>
 
         {/* Sidebar */}
         <div className="space-y-4">
           <div>
-            <p className="mb-1 text-xs text-neutral-600">Assignees</p>
+            <TypographyP className="mb-1 text-xs text-neutral-600">Assignees</TypographyP>
             {mr.assignees.length > 0 ? (
               mr.assignees.map((a) => (
                 <div key={a.id} className="flex items-center gap-2 text-sm text-neutral-300">
@@ -196,12 +195,12 @@ function MROverview({ mr }: { mr: MergeRequest }) {
                 </div>
               ))
             ) : (
-              <p className="text-xs text-neutral-600">None</p>
+              <TypographyP className="text-xs text-neutral-600">None</TypographyP>
             )}
           </div>
 
           <div>
-            <p className="mb-1 text-xs text-neutral-600">Reviewers</p>
+            <TypographyP className="mb-1 text-xs text-neutral-600">Reviewers</TypographyP>
             {mr.reviewers.length > 0 ? (
               mr.reviewers.map((r) => (
                 <div key={r.id} className="flex items-center gap-2 text-sm text-neutral-300">
@@ -212,39 +211,39 @@ function MROverview({ mr }: { mr: MergeRequest }) {
                 </div>
               ))
             ) : (
-              <p className="text-xs text-neutral-600">None</p>
+              <TypographyP className="text-xs text-neutral-600">None</TypographyP>
             )}
           </div>
 
           {mr.labels.length > 0 && (
             <div>
-              <p className="mb-1 text-xs text-neutral-600">Labels</p>
+              <TypographyP className="mb-1 text-xs text-neutral-600">Labels</TypographyP>
               <div className="flex flex-wrap gap-1">
                 {mr.labels.map((l) => (
-                  <span
+                  <TypographySpan
                     key={l.id}
                     className="rounded px-2 py-0.5 text-xs"
                     style={{ background: l.color + '20', color: l.color }}
                   >
                     {l.name}
-                  </span>
+                  </TypographySpan>
                 ))}
               </div>
             </div>
           )}
 
           <div>
-            <p className="mb-1 text-xs text-neutral-600">Branches</p>
-            <p className="text-xs text-neutral-400">
-              <span className="font-mono">{mr.sourceBranch}</span>
+            <TypographyP className="mb-1 text-xs text-neutral-600">Branches</TypographyP>
+            <TypographyP className="text-xs text-neutral-400">
+              <TypographySpan className="font-mono">{mr.sourceBranch}</TypographySpan>
               {' → '}
-              <span className="font-mono">{mr.targetBranch}</span>
-            </p>
+              <TypographySpan className="font-mono">{mr.targetBranch}</TypographySpan>
+            </TypographyP>
           </div>
 
           <div>
-            <p className="mb-1 text-xs text-neutral-600">Created</p>
-            <p className="text-xs text-neutral-400">{formatRelativeTime(mr.createdAt)}</p>
+            <TypographyP className="mb-1 text-xs text-neutral-600">Created</TypographyP>
+            <TypographyP className="text-xs text-neutral-400">{formatRelativeTime(mr.createdAt)}</TypographyP>
           </div>
         </div>
       </div>
@@ -275,7 +274,7 @@ function MRPipelines({ repoId, mr }: { repoId: number; mr: MergeRequest }) {
       ) : (
         <div className="space-y-1">
           {(pipelines ?? []).map((p) => (
-            <button
+            <Button
               key={p.id}
               onClick={(e) =>
                 openTab(
@@ -289,9 +288,10 @@ function MRPipelines({ repoId, mr }: { repoId: number; mr: MergeRequest }) {
                   { newTab: e.metaKey || e.ctrlKey }
                 )
               }
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-white/5"
+              variant="ghost"
+              className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left hover:bg-white/5"
             >
-              <span
+              <TypographySpan
                 className={cn(
                   'text-sm font-medium',
                   p.status === 'success' && 'text-status-success',
@@ -300,13 +300,13 @@ function MRPipelines({ repoId, mr }: { repoId: number; mr: MergeRequest }) {
                 )}
               >
                 {p.status}
-              </span>
-              <span className="flex-1 text-sm text-neutral-300">#{p.id} · {p.ref}</span>
-              <span className="text-xs text-neutral-600">{formatRelativeTime(p.updatedAt)}</span>
-            </button>
+              </TypographySpan>
+              <TypographySpan className="flex-1 text-sm text-neutral-300">#{p.id} · {p.ref}</TypographySpan>
+              <TypographySpan className="text-xs text-neutral-600">{formatRelativeTime(p.updatedAt)}</TypographySpan>
+            </Button>
           ))}
           {(pipelines ?? []).length === 0 && (
-            <p className="py-8 text-center text-sm text-neutral-600">No pipelines</p>
+            <TypographyP className="py-8 text-center text-sm text-neutral-600">No pipelines</TypographyP>
           )}
         </div>
       )}

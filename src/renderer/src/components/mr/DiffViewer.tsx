@@ -3,7 +3,7 @@ import { IPC } from '@shared/ipc-channels'
 import { DiffFile, FilePair, Thread } from '@shared/types'
 import { invoke } from '../../lib/ipc'
 import { useAccountStore } from '../../store/account'
-import { Loader2 } from 'lucide-react'
+import { Skeleton } from '../ui/skeleton'
 import { DiffEditor } from '@monaco-editor/react'
 
 interface DiffViewerProps {
@@ -29,8 +29,8 @@ export function DiffViewer({ repoId, mrIid, file, threads: _threads }: DiffViewe
 
   if (isLoading || !pair) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-600">
-        <Loader2 size={16} className="animate-spin" />
+      <div className="p-4">
+        <Skeleton className="h-[calc(100vh-240px)] w-full rounded-xl" />
       </div>
     )
   }

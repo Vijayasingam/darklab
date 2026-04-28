@@ -1,3 +1,5 @@
+import { TypographySpan } from '../ui/typography'
+import { Button } from '../ui/button'
 import { useRef } from 'react'
 import { useTabsStore } from '../../store/tabs'
 import { cn } from '../../lib/utils'
@@ -43,25 +45,27 @@ function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }) {
       )}
       onClick={() => setActiveTab(tab.id)}
     >
-      <span className="truncate">{tab.title}</span>
-      <button
+      <TypographySpan className="truncate">{tab.title}</TypographySpan>
+      <Button
         onClick={(e) => {
           e.stopPropagation()
           closeTab(tab.id)
         }}
+        variant="ghost"
+        size="icon"
         className={cn(
-          'flex h-4 w-4 flex-shrink-0 items-center justify-center rounded transition-colors',
+          'h-4 w-4 flex-shrink-0 rounded transition-colors',
           'opacity-0 group-hover:opacity-100',
           isActive && 'opacity-60',
           'hover:bg-white/10 hover:!opacity-100'
         )}
       >
         <X size={10} />
-      </button>
+      </Button>
 
       {/* Active indicator */}
       {isActive && (
-        <span className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent-500" />
+        <TypographySpan className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent-500" />
       )}
     </div>
   )
@@ -95,12 +99,14 @@ export function TabBar() {
       <div className="w-[70px] flex-shrink-0" />
 
       {/* Scroll left */}
-      <button
+      <Button
         onClick={() => scroll('left')}
-        className="no-drag flex-shrink-0 px-1 text-neutral-600 hover:text-neutral-300"
+        variant="ghost"
+        size="icon"
+        className="no-drag h-9 w-7 flex-shrink-0 rounded-none px-1 text-neutral-600 hover:text-neutral-300"
       >
         <ChevronLeft size={12} />
-      </button>
+      </Button>
 
       {/* Tab list */}
       <div
@@ -118,26 +124,30 @@ export function TabBar() {
       </div>
 
       {/* Scroll right */}
-      <button
+      <Button
         onClick={() => scroll('right')}
-        className="no-drag flex-shrink-0 px-1 text-neutral-600 hover:text-neutral-300"
+        variant="ghost"
+        size="icon"
+        className="no-drag h-9 w-7 flex-shrink-0 rounded-none px-1 text-neutral-600 hover:text-neutral-300"
       >
         <ChevronRight size={12} />
-      </button>
+      </Button>
 
       {/* New tab button */}
-      <button
+      <Button
         onClick={() =>
           openTab(
             { type: 'home' as never, title: 'My Work', icon: '', route: '/my-work', routeState: {} },
             { newTab: true }
           )
         }
-        className="no-drag flex-shrink-0 px-2 text-neutral-600 hover:text-neutral-300"
+        variant="ghost"
+        size="icon"
+        className="no-drag h-9 w-8 flex-shrink-0 rounded-none px-2 text-neutral-600 hover:text-neutral-300"
         title="New tab"
       >
         <Plus size={14} />
-      </button>
+      </Button>
     </div>
   )
 }

@@ -1,10 +1,23 @@
 import { BrowserWindow, shell } from 'electron'
+import { existsSync } from 'fs'
 import { join } from 'path'
 import { is } from '@electron-toolkit/utils'
 
 let mainWindow: BrowserWindow | null = null
 
+function resolveWindowIconPath(): string | undefined {
+  const candidates = [
+    join(process.resourcesPath, 'resources', 'icon.png'),
+    join(__dirname, '../../resources/icon.png'),
+    join(process.cwd(), 'build', 'icon.png')
+  ]
+
+  return candidates.find((p) => existsSync(p))
+}
+
 export function createWindow(): BrowserWindow {
+  const iconPath = resolveWindowIconPath()
+
   mainWindow = new BrowserWindow({
     width: 1280,
     height: 800,
@@ -20,7 +33,7 @@ export function createWindow(): BrowserWindow {
     backgroundColor: process.platform === 'darwin' ? '#00000000' : '#0a0a0a',
     frame: process.platform !== 'darwin',
     autoHideMenuBar: true,
-    icon: join(__dirname, '../../resources/icon.png'),
+    icon: iconPath,
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,

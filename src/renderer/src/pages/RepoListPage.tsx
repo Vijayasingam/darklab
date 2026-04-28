@@ -1,3 +1,6 @@
+import { TypographyH1, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -42,17 +45,17 @@ export function RepoListPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-3xl px-6 py-6">
-        <h1 className="mb-4 text-xl font-semibold text-neutral-100">Repositories</h1>
+        <TypographyH1 className="mb-4 text-xl font-semibold text-neutral-100">Repositories</TypographyH1>
 
         {/* Search */}
         <div className="mb-4 flex items-center gap-2 rounded-lg border border-white/10 bg-white/5 px-3 py-2">
           <Search size={14} className="flex-shrink-0 text-neutral-500" />
-          <input
+          <Input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search repositories…"
-            className="flex-1 bg-transparent text-sm text-neutral-200 placeholder-neutral-600 outline-none"
+            className="h-auto flex-1 border-none bg-transparent p-0 text-sm text-neutral-200 placeholder-neutral-600"
           />
         </div>
 
@@ -63,26 +66,27 @@ export function RepoListPage() {
         ) : (
           <div className="space-y-0.5">
             {(repos ?? []).map((repo) => (
-              <button
+              <Button
                 key={repo.id}
                 onClick={(e) => openRepo(repo, e.metaKey || e.ctrlKey)}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/5"
+                variant="ghost"
+                className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/5"
               >
                 <Folder size={16} className="flex-shrink-0 text-neutral-500" />
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="truncate text-sm font-medium text-neutral-200">{repo.fullPath}</p>
+                    <TypographyP className="truncate text-sm font-medium text-neutral-200">{repo.fullPath}</TypographyP>
                     {starred.includes(`${accountId}:${repo.id}`) && (
                       <Star size={12} className="flex-shrink-0 fill-accent-500 text-accent-500" />
                     )}
                   </div>
                   {repo.description && (
-                    <p className="mt-0.5 truncate text-xs text-neutral-500">{repo.description}</p>
+                    <TypographyP className="mt-0.5 truncate text-xs text-neutral-500">{repo.description}</TypographyP>
                   )}
                 </div>
                 <div className="flex-shrink-0 text-right">
                   {repo.lastPipelineStatus && (
-                    <span
+                    <TypographySpan
                       className={cn(
                         'inline-block rounded px-1.5 py-0.5 text-xs',
                         repo.lastPipelineStatus === 'success' && 'bg-status-success/10 text-status-success',
@@ -91,14 +95,14 @@ export function RepoListPage() {
                       )}
                     >
                       {repo.lastPipelineStatus}
-                    </span>
+                    </TypographySpan>
                   )}
-                  <p className="mt-0.5 text-xs text-neutral-600">{formatRelativeTime(repo.lastActivityAt)}</p>
+                  <TypographyP className="mt-0.5 text-xs text-neutral-600">{formatRelativeTime(repo.lastActivityAt)}</TypographyP>
                 </div>
-              </button>
+              </Button>
             ))}
             {(repos ?? []).length === 0 && !isLoading && (
-              <p className="py-8 text-center text-sm text-neutral-600">No repositories found</p>
+              <TypographyP className="py-8 text-center text-sm text-neutral-600">No repositories found</TypographyP>
             )}
           </div>
         )}

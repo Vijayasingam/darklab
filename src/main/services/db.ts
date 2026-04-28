@@ -5,7 +5,7 @@ import { join } from 'path'
 let db: Database.Database
 
 export function initDb(): void {
-  const dbPath = join(app.getPath('userData'), 'dark-git.db')
+  const dbPath = join(app.getPath('userData'), 'darklab.db')
   db = new Database(dbPath)
 
   // WAL mode for better concurrent read performance

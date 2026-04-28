@@ -83,7 +83,7 @@ export async function startOAuthFlow(
           <html><body style="font-family:system-ui;background:#0a0a0a;color:#fff;display:flex;align-items:center;justify-content:center;height:100vh;margin:0">
             <div style="text-align:center">
               <h2 style="color:#f59e0b">Authorization complete</h2>
-              <p>You can close this tab and return to dark-git.</p>
+              <p>You can close this tab and return to Darklab.</p>
             </div>
           </body></html>
         `)

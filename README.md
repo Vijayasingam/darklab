@@ -1,4 +1,4 @@
-# dark-git
+# Darklab
 
 A native desktop client for managing GitLab repositories.
 

@@ -16,7 +16,7 @@ export function initUpdater(mainWindow: BrowserWindow): void {
       .showMessageBox(mainWindow, {
         type: 'info',
         title: 'Update ready',
-        message: `dark-git ${info.version} has been downloaded.`,
+        message: `Darklab ${info.version} has been downloaded.`,
         detail: 'Restart the app to apply the update.',
         buttons: ['Restart Now', 'Later'],
         defaultId: 0,

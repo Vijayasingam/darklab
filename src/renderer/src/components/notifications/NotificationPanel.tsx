@@ -1,3 +1,5 @@
+import { TypographyP } from '../ui/typography'
+import { Button } from '../ui/button'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
 import { AppNotification } from '@shared/types'
@@ -39,12 +41,12 @@ export function NotificationPanel() {
     <div className="fixed inset-0 z-[180]" onClick={close}>
       <aside className="absolute right-3 top-12 h-[70vh] w-[360px] overflow-hidden rounded-xl border border-white/10 bg-base-900 shadow-2xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between border-b border-white/10 px-3 py-2.5">
-          <p className="text-sm font-medium text-neutral-200">Notifications</p>
-          <button onClick={() => markAllMutation.mutate()} className="text-xs text-neutral-500 hover:text-neutral-300">Mark all read</button>
+          <TypographyP className="text-sm font-medium text-neutral-200">Notifications</TypographyP>
+          <Button onClick={() => markAllMutation.mutate()} variant="link" className="h-auto text-xs text-neutral-500 hover:text-neutral-300">Mark all read</Button>
         </div>
         <div className="h-[calc(70vh-44px)] overflow-auto p-1">
           {data.map((n) => (
-            <button
+            <Button
               key={n.id}
               onClick={(e) => {
                 if (n.entityType === 'mr') {
@@ -62,14 +64,15 @@ export function NotificationPanel() {
                   qc.invalidateQueries({ queryKey: ['notifications', accountId] })
                 })
               }}
-              className={`w-full rounded-lg px-3 py-2.5 text-left hover:bg-white/5 ${n.read ? 'opacity-60' : ''}`}
+              variant="ghost"
+              className={`h-auto w-full rounded-lg px-3 py-2.5 text-left hover:bg-white/5 ${n.read ? 'opacity-60' : ''}`}
             >
-              <p className="text-sm text-neutral-200">{n.title}</p>
-              <p className="mt-0.5 line-clamp-2 text-xs text-neutral-500">{n.body}</p>
-              <p className="mt-1 text-[11px] text-neutral-600">{formatRelativeTime(n.createdAt)}</p>
-            </button>
+              <TypographyP className="text-sm text-neutral-200">{n.title}</TypographyP>
+              <TypographyP className="mt-0.5 line-clamp-2 text-xs text-neutral-500">{n.body}</TypographyP>
+              <TypographyP className="mt-1 text-[11px] text-neutral-600">{formatRelativeTime(n.createdAt)}</TypographyP>
+            </Button>
           ))}
-          {data.length === 0 && <p className="py-10 text-center text-sm text-neutral-600">No notifications</p>}
+          {data.length === 0 && <TypographyP className="py-10 text-center text-sm text-neutral-600">No notifications</TypographyP>}
         </div>
       </aside>
     </div>

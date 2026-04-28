@@ -58,7 +58,7 @@ export function initStore(): void {
     ElectronStore) as typeof ElectronStore
 
   store = new StoreCtor<StoreSchema>({
-    name: 'dark-git-settings',
+    name: 'darklab-settings',
     defaults,
     clearInvalidConfig: true
   }) as ElectronStore<StoreSchema> & AppStore

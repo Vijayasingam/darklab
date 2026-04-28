@@ -1,3 +1,6 @@
+import { TypographyH1, TypographyH2, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
+import { Input } from '../components/ui/input'
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -54,16 +57,17 @@ export function SettingsPage({ section }: SettingsPageProps) {
   return (
     <div className="flex h-full overflow-hidden">
       <aside className="w-[220px] flex-shrink-0 border-r border-white/5 bg-base-900 p-3">
-        <h1 className="mb-3 px-2 text-sm font-semibold text-neutral-200">Settings</h1>
+        <TypographyH1 className="mb-3 px-2 text-sm font-semibold text-neutral-200">Settings</TypographyH1>
         <nav className="space-y-1">
           {SECTIONS.map((s) => (
-            <button
+            <Button
               key={s}
               onClick={() => setActive(s)}
+              variant="ghost"
               className={`w-full rounded px-2 py-1.5 text-left text-sm ${active === s ? 'bg-white/10 text-neutral-100' : 'text-neutral-500 hover:text-neutral-300 hover:bg-white/5'}`}
             >
               {s[0].toUpperCase() + s.slice(1)}
-            </button>
+            </Button>
           ))}
         </nav>
       </aside>
@@ -81,17 +85,18 @@ export function SettingsPage({ section }: SettingsPageProps) {
 
         {active === 'appearance' && (
           <section className="max-w-lg">
-            <h2 className="mb-3 text-lg font-semibold text-neutral-100">Appearance</h2>
-            <p className="mb-3 text-sm text-neutral-500">Choose app theme.</p>
+            <TypographyH2 className="mb-3 text-lg font-semibold text-neutral-100">Appearance</TypographyH2>
+            <TypographyP className="mb-3 text-sm text-neutral-500">Choose app theme.</TypographyP>
             <div className="flex gap-2">
               {(['dark', 'light', 'system'] as const).map((t) => (
-                <button
+                <Button
                   key={t}
                   onClick={() => setThemeMutation.mutate(t)}
-                  className={`rounded-lg border px-3 py-1.5 text-sm ${settings?.theme === t ? 'border-accent-500 text-accent-400' : 'border-white/10 text-neutral-300 hover:bg-white/5'}`}
+                  variant={settings?.theme === t ? 'outline' : 'ghost'}
+                  className={`h-auto rounded-lg border px-3 py-1.5 text-sm ${settings?.theme === t ? 'border-accent-500 text-accent-400' : 'border-white/10 text-neutral-300 hover:bg-white/5'}`}
                 >
                   {t}
-                </button>
+                </Button>
               ))}
             </div>
           </section>
@@ -99,8 +104,8 @@ export function SettingsPage({ section }: SettingsPageProps) {
 
         {active !== 'accounts' && active !== 'appearance' && (
           <section>
-            <h2 className="mb-2 text-lg font-semibold text-neutral-100">{active[0].toUpperCase() + active.slice(1)}</h2>
-            <p className="text-sm text-neutral-500">This section is scaffolded and ready for feature wiring.</p>
+            <TypographyH2 className="mb-2 text-lg font-semibold text-neutral-100">{active[0].toUpperCase() + active.slice(1)}</TypographyH2>
+            <TypographyP className="text-sm text-neutral-500">This section is scaffolded and ready for feature wiring.</TypographyP>
           </section>
         )}
       </main>
@@ -126,30 +131,30 @@ function AccountsSection({
 
   return (
     <section className="max-w-xl">
-      <h2 className="mb-3 text-lg font-semibold text-neutral-100">Accounts</h2>
-      <p className="mb-4 text-sm text-neutral-500">Add a GitLab account using a personal access token.</p>
+      <TypographyH2 className="mb-3 text-lg font-semibold text-neutral-100">Accounts</TypographyH2>
+      <TypographyP className="mb-4 text-sm text-neutral-500">Add a GitLab account using a personal access token.</TypographyP>
 
       <div className="mb-6 rounded-xl border border-white/10 bg-white/5 p-4">
         <div className="space-y-2">
-          <input
+          <Input
             value={baseUrl}
             onChange={(e) => setBaseUrl(e.target.value)}
-            className="app-input w-full rounded-lg px-3 py-2 text-sm"
+            className="w-full text-sm"
             placeholder="https://gitlab.com"
           />
-          <input
+          <Input
             value={pat}
             onChange={(e) => setPat(e.target.value)}
-            className="app-input w-full rounded-lg px-3 py-2 text-sm"
+            className="w-full text-sm"
             placeholder="Personal access token"
           />
-          <button
+          <Button
             onClick={() => onAddPat({ baseUrl, pat })}
             disabled={!pat.trim()}
-            className="app-button-primary rounded-lg px-3 py-1.5 text-sm font-medium"
+            className="px-3 py-1.5 text-sm font-medium"
           >
             Add account
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -157,18 +162,18 @@ function AccountsSection({
         {accounts.map((a) => (
           <div key={a.id} className="flex items-center gap-2 rounded-lg border border-white/10 px-3 py-2">
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm text-neutral-200">{a.displayName} ({a.username})</p>
-              <p className="text-xs text-neutral-600">{a.baseUrl}</p>
+              <TypographyP className="truncate text-sm text-neutral-200">{a.displayName} ({a.username})</TypographyP>
+              <TypographyP className="text-xs text-neutral-600">{a.baseUrl}</TypographyP>
             </div>
             {activeAccountId === a.id ? (
-              <span className="rounded bg-accent-500/20 px-2 py-0.5 text-xs text-accent-400">Active</span>
+              <TypographySpan className="rounded bg-accent-500/20 px-2 py-0.5 text-xs text-accent-400">Active</TypographySpan>
             ) : (
-              <button onClick={() => onSwitch(a.id)} className="text-xs text-neutral-400 hover:text-neutral-200">Switch</button>
+              <Button onClick={() => onSwitch(a.id)} variant="link" className="h-auto text-xs text-neutral-400 hover:text-neutral-200">Switch</Button>
             )}
-            <button onClick={() => onRemove(a.id)} className="text-xs text-status-failed hover:text-status-failed/80">Remove</button>
+            <Button onClick={() => onRemove(a.id)} variant="link" className="h-auto text-xs text-status-failed hover:text-status-failed/80">Remove</Button>
           </div>
         ))}
-        {accounts.length === 0 && <p className="text-sm text-neutral-600">No accounts yet</p>}
+        {accounts.length === 0 && <TypographyP className="text-sm text-neutral-600">No accounts yet</TypographyP>}
       </div>
     </section>
   )

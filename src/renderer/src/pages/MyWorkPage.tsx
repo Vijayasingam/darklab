@@ -1,3 +1,5 @@
+import { TypographyH1, TypographyH2, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
 import { useQuery } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
 import { MergeRequest, Pipeline } from '@shared/types'
@@ -23,26 +25,27 @@ function PipelineStatusIcon({ status }: { status: string }) {
     canceled: { icon: <XCircle size={14} />, className: 'text-neutral-500' }
   }
   const entry = map[status] ?? { icon: <AlertCircle size={14} />, className: 'text-neutral-500' }
-  return <span className={entry.className}>{entry.icon}</span>
+  return <TypographySpan className={entry.className}>{entry.icon}</TypographySpan>
 }
 
 function MRRow({ mr, onOpen }: { mr: MergeRequest; onOpen: (mr: MergeRequest, newTab: boolean) => void }) {
   return (
-    <button
+    <Button
       onClick={(e) => onOpen(mr, e.metaKey || e.ctrlKey)}
-      className="flex w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
+      variant="ghost"
+      className="flex h-auto w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
     >
       <GitPullRequest size={14} className="mt-0.5 flex-shrink-0 text-accent-400" />
       <div className="min-w-0 flex-1">
-        <p className="truncate text-sm text-neutral-200">{mr.title}</p>
-        <p className="mt-0.5 text-xs text-neutral-500">
+        <TypographyP className="truncate text-sm text-neutral-200">{mr.title}</TypographyP>
+        <TypographyP className="mt-0.5 text-xs text-neutral-500">
           {mr.repoFullPath} · !{mr.iid} · {formatRelativeTime(mr.updatedAt)}
-        </p>
+        </TypographyP>
       </div>
       {mr.pipelineStatus && (
         <PipelineStatusIcon status={mr.pipelineStatus} />
       )}
-    </button>
+    </Button>
   )
 }
 
@@ -58,11 +61,11 @@ function Section({
   return (
     <section className="mb-6">
       <div className="mb-2 flex items-center gap-2">
-        <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{title}</h2>
-        <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-xs text-neutral-500">{count}</span>
+        <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{title}</TypographyH2>
+        <TypographySpan className="rounded-full bg-white/5 px-1.5 py-0.5 text-xs text-neutral-500">{count}</TypographySpan>
       </div>
       {count === 0 ? (
-        <p className="py-2 text-sm text-neutral-600">None</p>
+        <TypographyP className="py-2 text-sm text-neutral-600">None</TypographyP>
       ) : (
         <div className="space-y-0.5">{children}</div>
       )}
@@ -98,8 +101,8 @@ export function MyWorkPage() {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 text-neutral-500">
         <GitBranch size={40} className="opacity-30" />
-        <p className="text-sm">Add an account to get started</p>
-        <button
+        <TypographyP className="text-sm">Add an account to get started</TypographyP>
+        <Button
           onClick={() =>
             openTab({
               type: 'settings' as never,
@@ -109,10 +112,10 @@ export function MyWorkPage() {
               routeState: { section: 'accounts' }
             })
           }
-          className="app-button-primary rounded-lg px-4 py-2 text-sm font-medium"
+          className="px-4 py-2 text-sm font-medium"
         >
           Add account
-        </button>
+        </Button>
       </div>
     )
   }
@@ -136,7 +139,7 @@ export function MyWorkPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-3xl px-6 py-6">
-        <h1 className="mb-6 text-xl font-semibold text-neutral-100">My Work</h1>
+        <TypographyH1 className="mb-6 text-xl font-semibold text-neutral-100">My Work</TypographyH1>
 
         <Section title="Needs your review" count={data.needsReview.length}>
           {data.needsReview.map((mr) => (
@@ -159,13 +162,13 @@ export function MyWorkPage() {
         {data.myPipelines.length > 0 && (
           <section className="mb-6">
             <div className="mb-2 flex items-center gap-2">
-              <h2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+              <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
                 Recent pipelines
-              </h2>
+              </TypographyH2>
             </div>
             <div className="space-y-0.5">
               {data.myPipelines.map((p) => (
-                <button
+                <Button
                   key={p.id}
                   onClick={(e) =>
                     openTab(
@@ -179,16 +182,17 @@ export function MyWorkPage() {
                       { newTab: e.metaKey || e.ctrlKey }
                     )
                   }
-                  className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
+                  variant="ghost"
+                  className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
                 >
                   <PipelineStatusIcon status={p.status} />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm text-neutral-200">
+                    <TypographyP className="truncate text-sm text-neutral-200">
                       #{p.id} · {p.ref}
-                    </p>
-                    <p className="mt-0.5 text-xs text-neutral-500">{formatRelativeTime(p.updatedAt)}</p>
+                    </TypographyP>
+                    <TypographyP className="mt-0.5 text-xs text-neutral-500">{formatRelativeTime(p.updatedAt)}</TypographyP>
                   </div>
-                </button>
+                </Button>
               ))}
             </div>
           </section>

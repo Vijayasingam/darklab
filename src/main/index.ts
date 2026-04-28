@@ -1,7 +1,8 @@
-import { app, BrowserWindow, globalShortcut, shell } from 'electron'
+import { app, BrowserWindow, globalShortcut, nativeImage, nativeTheme, shell } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+import { existsSync } from 'fs'
+import { join } from 'path'
 import { createWindow, getMainWindow } from './window'
-import { createTray } from './tray'
 import { registerProtocol } from './protocol'
 import { initDb } from './services/db'
 import { initStore } from './services/store'
@@ -20,9 +21,42 @@ import { registerAppHandlers } from './ipc/app'
 // Handle protocol before app ready
 registerProtocol()
 
+app.name = 'Darklab'
+
+function resolveDockIconPath(useDarkTheme: boolean): string | undefined {
+  const themedName = useDarkTheme ? 'icon-dark.png' : 'icon-light.png'
+  const candidates = [
+    join(process.resourcesPath, 'resources', themedName),
+    join(app.getAppPath(), 'resources', themedName),
+    join(process.cwd(), 'build', themedName),
+    join(process.resourcesPath, 'resources', 'icon.png'),
+    join(app.getAppPath(), 'resources', 'icon.png'),
+    join(process.cwd(), 'build', 'icon.png')
+  ]
+
+  return candidates.find((p) => existsSync(p))
+}
+
+function applyDockIconForTheme(): void {
+  if (process.platform !== 'darwin') return
+
+  const dockIconPath = resolveDockIconPath(nativeTheme.shouldUseDarkColors)
+  if (dockIconPath) {
+    // Our PNGs are 512×512px. Without a scaleFactor Electron treats them as
+    // 512 logical points — way too large. Loading as @2x makes the logical
+    // size 256pt, which matches the macOS dock's natural icon slot.
+    const raw = nativeImage.createFromPath(dockIconPath)
+    const icon = nativeImage.createFromBuffer(raw.toPNG(), { scaleFactor: 2.0 })
+    app.dock.setIcon(icon)
+  }
+}
+
 app.whenReady().then(async () => {
   // Set app user model id for Windows
-  electronApp.setAppUserModelId('com.tidingsia.dark-git')
+  electronApp.setAppUserModelId('com.go-dark.darklab')
+
+  applyDockIconForTheme()
+  nativeTheme.on('updated', applyDockIconForTheme)
 
   // Dev: watch shortcuts; prod: prevent default
   app.on('browser-window-created', (_, window) => {
@@ -46,9 +80,6 @@ app.whenReady().then(async () => {
 
   // Create main window
   const mainWindow = createWindow()
-
-  // System tray
-  createTray(mainWindow)
 
   // Auto-updater (production only)
   if (!is.dev) {
@@ -94,6 +125,7 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', () => {
+  nativeTheme.removeListener('updated', applyDockIconForTheme)
   globalShortcut.unregisterAll()
   stopPolling()
 })

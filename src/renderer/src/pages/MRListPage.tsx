@@ -1,3 +1,6 @@
+import { TypographyH1, TypographyP, TypographySpan } from '../components/ui/typography'
+import { Button } from '../components/ui/button'
+import { Tabs, TabsList, TabsTrigger } from '../components/ui/tabs'
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { IPC } from '@shared/ipc-channels'
@@ -52,25 +55,18 @@ export function MRListPage({ filters }: MRListPageProps) {
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-4xl px-6 py-6">
         <div className="mb-4 flex items-center justify-between">
-          <h1 className="text-xl font-semibold text-neutral-100">Merge Requests</h1>
+          <TypographyH1 className="text-xl font-semibold text-neutral-100">Merge Requests</TypographyH1>
 
           {/* State filter */}
-          <div className="flex items-center gap-1 rounded-lg bg-white/5 p-1">
-            {STATE_OPTIONS.map((opt) => (
-              <button
-                key={opt.value}
-                onClick={() => setState(opt.value)}
-                className={cn(
-                  'rounded px-3 py-1 text-sm transition-colors',
-                  state === opt.value
-                    ? 'bg-white/10 text-neutral-100'
-                    : 'text-neutral-500 hover:text-neutral-300'
-                )}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
+          <Tabs value={state} onValueChange={(v) => setState(v as MRState | 'all')} className="w-auto">
+            <TabsList variant="compact">
+              {STATE_OPTIONS.map((opt) => (
+                <TabsTrigger key={opt.value} value={opt.value} variant="compact">
+                  {opt.label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
         </div>
 
         {isLoading ? (
@@ -80,36 +76,37 @@ export function MRListPage({ filters }: MRListPageProps) {
         ) : (
           <div className="space-y-0.5">
             {(mrs ?? []).map((mr) => (
-              <button
+              <Button
                 key={mr.id}
                 onClick={(e) => openMR(mr, e.metaKey || e.ctrlKey)}
-                className="flex w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/5"
+                variant="ghost"
+                className="flex h-auto w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/5"
               >
                 <GitPullRequest size={15} className="mt-0.5 flex-shrink-0 text-accent-400" />
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm text-neutral-200">{mr.title}</p>
+                  <TypographyP className="truncate text-sm text-neutral-200">{mr.title}</TypographyP>
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
-                    <span>{mr.repoFullPath} · !{mr.iid}</span>
-                    <span>·</span>
-                    <span className="flex items-center gap-1">
+                    <TypographySpan>{mr.repoFullPath} · !{mr.iid}</TypographySpan>
+                    <TypographySpan>·</TypographySpan>
+                    <TypographySpan className="flex items-center gap-1">
                       <User size={11} />
                       {mr.author.username}
-                    </span>
-                    <span>·</span>
-                    <span>{formatRelativeTime(mr.updatedAt)}</span>
+                    </TypographySpan>
+                    <TypographySpan>·</TypographySpan>
+                    <TypographySpan>{formatRelativeTime(mr.updatedAt)}</TypographySpan>
                     {mr.labels.map((l) => (
-                      <span
+                      <TypographySpan
                         key={l.id}
                         className="rounded px-1.5 py-0.5"
                         style={{ background: l.color + '20', color: l.color }}
                       >
                         {l.name}
-                      </span>
+                      </TypographySpan>
                     ))}
                   </div>
                 </div>
                 {mr.pipelineStatus && (
-                  <span
+                  <TypographySpan
                     className={cn(
                       'flex-shrink-0 text-xs',
                       mr.pipelineStatus === 'success' && 'text-status-success',
@@ -118,12 +115,12 @@ export function MRListPage({ filters }: MRListPageProps) {
                     )}
                   >
                     {mr.pipelineStatus}
-                  </span>
+                  </TypographySpan>
                 )}
-              </button>
+              </Button>
             ))}
             {(mrs ?? []).length === 0 && (
-              <p className="py-8 text-center text-sm text-neutral-600">No merge requests</p>
+              <TypographyP className="py-8 text-center text-sm text-neutral-600">No merge requests</TypographyP>
             )}
           </div>
         )}
