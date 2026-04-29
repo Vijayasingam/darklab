@@ -1,6 +1,57 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/forms";
+@plugin "@tailwindcss/typography";
+
+/* Class-based dark mode (darkMode: 'class' equivalent) */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: Inter, system-ui, sans-serif;
+
+  /* Base surfaces */
+  --color-base: #0a0a0a;
+  --color-base-950: #0a0a0a;
+  --color-base-900: #111111;
+  --color-base-800: #1a1a1a;
+  --color-base-700: #242424;
+  --color-base-surface: #111111;
+  --color-base-elevated: #1a1a1a;
+  --color-base-border: #2a2a2a;
+
+  /* Amber/orange accent */
+  --color-accent: #f59e0b;
+  --color-accent-hover: #fbbf24;
+  --color-accent-muted: #92400e;
+  --color-accent-foreground: #0a0a0a;
+
+  /* Semantic status colours */
+  --color-status-success: #22c55e;
+  --color-status-warning: #f59e0b;
+  --color-status-failed: #ef4444;
+  --color-status-error: #ef4444;
+  --color-status-info: #3b82f6;
+  --color-status-running: #f59e0b;
+  --color-status-pending: #6b7280;
+  --color-status-cancelled: #6b7280;
+
+  --radius: 0.5rem;
+
+  --text-meta: 0.6875rem;
+  --text-meta--line-height: 1rem;
+  --text-body: 0.8125rem;
+  --text-body--line-height: 1.25rem;
+  --text-title: 0.9375rem;
+  --text-title--line-height: 1.5rem;
+  --text-heading: 1.25rem;
+  --text-heading--line-height: 1.75rem;
+
+  --animate-pulse_amber: pulse_amber 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse_amber {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 
 @layer base {
   :root {
