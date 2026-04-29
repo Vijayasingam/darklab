@@ -47,7 +47,7 @@ function applyDockIconForTheme(): void {
     // size 256pt, which matches the macOS dock's natural icon slot.
     const raw = nativeImage.createFromPath(dockIconPath)
     const icon = nativeImage.createFromBuffer(raw.toPNG(), { scaleFactor: 2.0 })
-    app.dock.setIcon(icon)
+    app.dock?.setIcon(icon)
   }
 }
 
