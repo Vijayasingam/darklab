@@ -39,10 +39,10 @@ export function NotificationPanel() {
 
   return (
     <div className="fixed inset-0 z-[180]" onClick={close}>
-      <aside className="absolute right-3 top-12 h-[70vh] w-[360px] overflow-hidden rounded-xl border border-white/10 bg-base-900 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between border-b border-white/10 px-3 py-2.5">
-          <TypographyP className="text-sm font-medium text-neutral-200">Notifications</TypographyP>
-          <Button onClick={() => markAllMutation.mutate()} variant="link" className="h-auto text-xs text-neutral-500 hover:text-neutral-300">Mark all read</Button>
+      <aside className="absolute right-3 top-12 h-[70vh] w-[360px] overflow-hidden border border-border bg-card shadow-2xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-center justify-between border-b border-border px-3 py-2.5">
+          <TypographyP className="text-sm font-medium text-foreground">Notifications</TypographyP>
+          <Button onClick={() => markAllMutation.mutate()} variant="link" className="h-auto text-xs text-muted-foreground/70 hover:text-foreground">Mark all read</Button>
         </div>
         <div className="h-[calc(70vh-44px)] overflow-auto p-1">
           {data.map((n) => (
@@ -65,14 +65,14 @@ export function NotificationPanel() {
                 })
               }}
               variant="ghost"
-              className={`h-auto w-full rounded-lg px-3 py-2.5 text-left hover:bg-white/5 ${n.read ? 'opacity-60' : ''}`}
+              className={`h-auto w-full px-3 py-2.5 text-left hover:bg-muted/50 ${n.read ? 'opacity-60' : ''}`}
             >
-              <TypographyP className="text-sm text-neutral-200">{n.title}</TypographyP>
-              <TypographyP className="mt-0.5 line-clamp-2 text-xs text-neutral-500">{n.body}</TypographyP>
-              <TypographyP className="mt-1 text-[11px] text-neutral-600">{formatRelativeTime(n.createdAt)}</TypographyP>
+              <TypographyP className="text-sm text-foreground">{n.title}</TypographyP>
+              <TypographyP className="mt-0.5 line-clamp-2 text-xs text-muted-foreground/70">{n.body}</TypographyP>
+              <TypographyP className="mt-1 text-[11px] text-muted-foreground">{formatRelativeTime(n.createdAt)}</TypographyP>
             </Button>
           ))}
-          {data.length === 0 && <TypographyP className="py-10 text-center text-sm text-neutral-600">No notifications</TypographyP>}
+          {data.length === 0 && <TypographyP className="py-10 text-center text-sm text-muted-foreground">No notifications</TypographyP>}
         </div>
       </aside>
     </div>

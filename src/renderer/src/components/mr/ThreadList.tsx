@@ -7,7 +7,7 @@ import { Thread, Note } from '@shared/types'
 import { invoke } from '../../lib/ipc'
 import { IPC } from '@shared/ipc-channels'
 import { cn, formatRelativeTime } from '../../lib/utils'
-import { CheckCircle2, ChevronDown, ChevronRight, MessageSquare, Send } from 'lucide-react'
+import { CheckCircle, CaretDown, CaretRight, ChatCircle, PaperPlaneTilt } from '@phosphor-icons/react'
 
 interface ThreadListProps {
   threads: Thread[]
@@ -18,8 +18,8 @@ interface ThreadListProps {
 export function ThreadList({ threads, repoId, mrIid }: ThreadListProps) {
   if (threads.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-neutral-600">
-        <MessageSquare size={24} className="mb-2 opacity-40" />
+      <div className="flex flex-col items-center justify-center py-12 text-muted-foreground">
+        <ChatCircle size={24} className="mb-2 opacity-40" />
         <TypographyP className="text-sm">No threads yet</TypographyP>
       </div>
     )
@@ -33,7 +33,7 @@ export function ThreadList({ threads, repoId, mrIid }: ThreadListProps) {
     <div className="space-y-3">
       {resolvable.length > 0 && (
         <div>
-          <TypographyP className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+          <TypographyP className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
             Code threads ({resolvable.filter((t) => !t.resolved).length} unresolved)
           </TypographyP>
           <div className="space-y-2">
@@ -45,7 +45,7 @@ export function ThreadList({ threads, repoId, mrIid }: ThreadListProps) {
       )}
       {general.length > 0 && (
         <div>
-          <TypographyP className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+          <TypographyP className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
             General comments
           </TypographyP>
           <div className="space-y-2">
@@ -86,8 +86,8 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
   return (
     <div
       className={cn(
-        'rounded-lg border',
-        thread.resolved ? 'border-white/5 opacity-60' : 'border-white/10'
+        'border',
+        thread.resolved ? 'border-border/50 opacity-60' : 'border-border'
       )}
     >
       {/* Thread header */}
@@ -96,25 +96,25 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
         variant="ghost"
         className="flex h-auto w-full items-center gap-2 px-3 py-2.5 text-left"
       >
-        {expanded ? <ChevronDown size={13} className="text-neutral-500" /> : <ChevronRight size={13} className="text-neutral-500" />}
-        <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-medium text-neutral-300">
+        {expanded ? <CaretDown size={13} className="text-muted-foreground/70" /> : <CaretRight size={13} className="text-muted-foreground/70" />}
+        <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center bg-muted text-xs font-medium text-muted-foreground">
           {firstNote?.author?.name?.[0] ?? '?'}
         </div>
-        <TypographySpan className="flex-1 truncate text-sm text-neutral-300">
+        <TypographySpan className="flex-1 truncate text-sm text-muted-foreground">
           {firstNote?.author?.name} · {firstNote && formatRelativeTime(firstNote.createdAt)}
         </TypographySpan>
         {thread.position && (
-          <TypographySpan className="text-xs text-neutral-600 font-mono">
+          <TypographySpan className="text-xs text-muted-foreground font-mono">
             {thread.position.newPath?.split('/').pop()}:{thread.position.newLine}
           </TypographySpan>
         )}
         {thread.resolved && (
-          <CheckCircle2 size={14} className="text-status-success" />
+          <CheckCircle size={14} className="text-emerald-500" />
         )}
       </Button>
 
       {expanded && (
-        <div className="border-t border-white/5 px-3 pb-3">
+        <div className="border-t border-border/50 px-3 pb-3">
           {thread.notes.map((note) => (
             <NoteItem key={note.id} note={note} />
           ))}
@@ -125,7 +125,7 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
               <Button
                 onClick={() => setShowReply((v) => !v)}
                 variant="link"
-                className="h-auto p-0 text-xs text-neutral-500 hover:text-neutral-300"
+                className="h-auto p-0 text-xs text-muted-foreground/70 hover:text-foreground"
               >
                 Reply
               </Button>
@@ -136,8 +136,8 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
                 className={cn(
                   'ml-auto h-auto p-0 text-xs transition-colors',
                   thread.resolved
-                    ? 'text-neutral-500 hover:text-neutral-300'
-                    : 'text-status-success hover:text-status-success/80'
+                    ? 'text-muted-foreground/70 hover:text-foreground'
+                    : 'text-emerald-500 hover:text-emerald-500/80'
                 )}
               >
                 {thread.resolved ? 'Unresolve' : 'Resolve thread'}
@@ -152,7 +152,7 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
                 onChange={(e) => setReplyText(e.target.value)}
                 placeholder="Leave a comment…"
                 rows={2}
-                className="flex-1 resize-none bg-white/5 text-sm text-neutral-200 placeholder-neutral-600"
+                className="flex-1 resize-none bg-muted text-sm text-foreground placeholder:text-muted-foreground"
               />
               <Button
                 onClick={() => replyMutation.mutate()}
@@ -160,7 +160,7 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
                 size="icon"
                 className="flex-shrink-0 p-2"
               >
-                <Send size={14} />
+                <PaperPlaneTilt size={14} />
               </Button>
             </div>
           )}
@@ -173,18 +173,18 @@ function ThreadItem({ thread, repoId, mrIid }: { thread: Thread; repoId: number;
 function NoteItem({ note }: { note: Note }) {
   return (
     <div className="mt-2.5 flex gap-2">
-      <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white/10 text-xs font-medium text-neutral-300">
+      <div className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center bg-muted text-xs font-medium text-muted-foreground">
         {note.author?.name?.[0] ?? '?'}
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          <TypographySpan className="text-xs font-medium text-neutral-300">{note.author?.name}</TypographySpan>
-          <TypographySpan className="text-xs text-neutral-600">{formatRelativeTime(note.createdAt)}</TypographySpan>
+          <TypographySpan className="text-xs font-medium text-muted-foreground">{note.author?.name}</TypographySpan>
+          <TypographySpan className="text-xs text-muted-foreground">{formatRelativeTime(note.createdAt)}</TypographySpan>
           {note.isDraft && (
-            <TypographySpan className="rounded bg-white/5 px-1 py-0.5 text-xs text-neutral-500">Draft</TypographySpan>
+            <TypographySpan className="bg-muted px-1 py-0.5 text-xs text-muted-foreground/70">Draft</TypographySpan>
           )}
         </div>
-        <TypographyP className="mt-0.5 text-sm text-neutral-400 leading-relaxed whitespace-pre-wrap">{note.body}</TypographyP>
+        <TypographyP className="mt-0.5 text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">{note.body}</TypographyP>
       </div>
     </div>
   )

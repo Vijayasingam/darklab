@@ -17,10 +17,10 @@ export function OnboardingPage() {
 
   return (
     <div className="flex h-full items-center justify-center px-6">
-      <div className="max-w-xl rounded-2xl border border-white/10 bg-white/5 p-8 text-center">
-        <TypographyP className="mb-2 text-xs uppercase tracking-widest text-accent-400">Darklab</TypographyP>
-        <TypographyH1 className="mb-3 text-2xl font-semibold text-neutral-100">Review merge requests without browser chaos</TypographyH1>
-        <TypographyP className="mb-6 text-sm text-neutral-400">
+      <div className="max-w-xl border border-border bg-muted p-8 text-center">
+        <TypographyP className="mb-2 text-xs uppercase tracking-widest text-primary">Darklab</TypographyP>
+        <TypographyH1 className="mb-3 text-2xl font-semibold text-foreground">Review merge requests without browser chaos</TypographyH1>
+        <TypographyP className="mb-6 text-sm text-muted-foreground">
           Connect a GitLab account, browse repos, review diffs with inline discussion, and track pipelines in one native desktop app.
         </TypographyP>
         <Button

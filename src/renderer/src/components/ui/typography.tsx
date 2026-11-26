@@ -52,7 +52,7 @@ export function TypographyListItem({ className, ...props }: Props<'li'>) {
 export function TypographyInlineCode({ className, ...props }: Props<'code'>) {
   return (
     <code
-      className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
+      className={cn('relative bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', className)}
       {...props}
     />
   )

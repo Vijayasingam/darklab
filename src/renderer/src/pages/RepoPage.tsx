@@ -7,7 +7,7 @@ import { invoke } from '../lib/ipc'
 import { useTabsStore } from '../store/tabs'
 import { useAccountStore } from '../store/account'
 import { cn, formatRelativeTime } from '../lib/utils'
-import { Loader2, GitPullRequest, GitBranch, Activity } from 'lucide-react'
+import { CircleNotch, GitPullRequest, GitBranch, Pulse } from '@phosphor-icons/react'
 
 interface RepoPageProps {
   repoId: number
@@ -64,8 +64,8 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
 
   if (repoLoading || !repo) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-600">
-        <Loader2 size={20} className="animate-spin" />
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <CircleNotch size={20} className="animate-spin" />
       </div>
     )
   }
@@ -75,13 +75,13 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
       <div className="mx-auto max-w-4xl px-6 py-6">
         {/* Header */}
         <div className="mb-6 flex items-start gap-3">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-white/5">
-            <GitBranch size={18} className="text-accent-400" />
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center bg-muted">
+            <GitBranch size={18} className="text-primary" />
           </div>
           <div>
-            <TypographyH1 className="text-xl font-semibold text-neutral-100">{repo.fullPath}</TypographyH1>
+            <TypographyH1 className="text-xl font-semibold text-foreground">{repo.fullPath}</TypographyH1>
             {repo.description && (
-              <TypographyP className="mt-1 text-sm text-neutral-500">{repo.description}</TypographyP>
+              <TypographyP className="mt-1 text-sm text-muted-foreground/70">{repo.description}</TypographyP>
             )}
           </div>
           <div className="ml-auto flex items-center gap-2">
@@ -114,7 +114,7 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
               variant="outline"
               className="flex items-center gap-1.5 px-3 py-1.5 text-sm"
             >
-              <Activity size={14} />
+              <Pulse size={14} />
               Pipelines
             </Button>
           </div>
@@ -123,7 +123,7 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Open MRs */}
           <section>
-            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
               Open merge requests
             </TypographyH2>
             <div className="space-y-0.5">
@@ -132,22 +132,22 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
                   key={mr.id}
                   onClick={(e) => openMR(mr, e.metaKey || e.ctrlKey)}
                   variant="ghost"
-                  className="flex h-auto w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
+                  className="flex h-auto w-full items-center gap-2 px-3 py-2 text-left hover:bg-muted/50"
                 >
-                  <GitPullRequest size={13} className="flex-shrink-0 text-accent-400" />
-                  <TypographySpan className="flex-1 truncate text-sm text-neutral-200">{mr.title}</TypographySpan>
-                  <TypographySpan className="flex-shrink-0 text-xs text-neutral-600">!{mr.iid}</TypographySpan>
+                  <GitPullRequest size={13} className="flex-shrink-0 text-primary" />
+                  <TypographySpan className="flex-1 truncate text-sm text-foreground">{mr.title}</TypographySpan>
+                  <TypographySpan className="flex-shrink-0 text-xs text-muted-foreground">!{mr.iid}</TypographySpan>
                 </Button>
               ))}
               {(mrs ?? []).length === 0 && (
-                <TypographyP className="py-4 text-center text-sm text-neutral-600">No open MRs</TypographyP>
+                <TypographyP className="py-4 text-center text-sm text-muted-foreground">No open MRs</TypographyP>
               )}
             </div>
           </section>
 
           {/* Recent pipelines */}
           <section>
-            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">
+            <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
               Recent pipelines
             </TypographyH2>
             <div className="space-y-0.5">
@@ -156,25 +156,25 @@ export function RepoPage({ repoId, repoPath: _repoPath }: RepoPageProps) {
                   key={p.id}
                   onClick={(e) => openPipeline(p, e.metaKey || e.ctrlKey)}
                   variant="ghost"
-                  className="flex h-auto w-full items-center gap-2 rounded-lg px-3 py-2 text-left hover:bg-white/5"
+                  className="flex h-auto w-full items-center gap-2 px-3 py-2 text-left hover:bg-muted/50"
                 >
                   <TypographySpan
                     className={cn(
                       'flex-shrink-0 text-xs font-medium',
-                      p.status === 'success' && 'text-status-success',
-                      p.status === 'failed' && 'text-status-failed',
-                      p.status === 'running' && 'text-status-running',
-                      p.status === 'canceled' && 'text-neutral-500'
+                      p.status === 'success' && 'text-emerald-500',
+                      p.status === 'failed' && 'text-destructive',
+                      p.status === 'running' && 'text-primary',
+                      p.status === 'canceled' && 'text-muted-foreground/70'
                     )}
                   >
                     {p.status}
                   </TypographySpan>
-                  <TypographySpan className="flex-1 truncate text-sm text-neutral-300">{p.ref}</TypographySpan>
-                  <TypographySpan className="flex-shrink-0 text-xs text-neutral-600">{formatRelativeTime(p.updatedAt)}</TypographySpan>
+                  <TypographySpan className="flex-1 truncate text-sm text-muted-foreground">{p.ref}</TypographySpan>
+                  <TypographySpan className="flex-shrink-0 text-xs text-muted-foreground">{formatRelativeTime(p.updatedAt)}</TypographySpan>
                 </Button>
               ))}
               {(pipelines ?? []).length === 0 && (
-                <TypographyP className="py-4 text-center text-sm text-neutral-600">No pipelines</TypographyP>
+                <TypographyP className="py-4 text-center text-sm text-muted-foreground">No pipelines</TypographyP>
               )}
             </div>
           </section>

@@ -72,7 +72,7 @@ export function App() {
   }, [openCommandCenter, setActiveAccountId, closeAllTabs])
 
   return (
-    <div className="flex h-full w-full overflow-hidden bg-base-950 text-neutral-200">
+    <div className="flex h-full w-full overflow-hidden bg-background text-foreground">
       <Shell />
       <CommandCenter />
       <NotificationPanel />

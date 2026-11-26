@@ -8,7 +8,7 @@ import { invoke, on } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { cn, formatRelativeTime, formatDuration, formatBytes } from '../lib/utils'
 import { parseAnsi } from '../lib/ansi'
-import { Loader2, Download, FileArchive } from 'lucide-react'
+import { CircleNotch, Download, FileArchive } from '@phosphor-icons/react'
 
 interface JobPageProps {
   repoId: number
@@ -88,8 +88,8 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
 
   if (isLoading || !job) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-600">
-        <Loader2 size={20} className="animate-spin" />
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <CircleNotch size={20} className="animate-spin" />
       </div>
     )
   }
@@ -98,20 +98,20 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
     <div className="flex h-full overflow-hidden">
       {/* Main log area */}
       <div className="flex flex-1 flex-col overflow-hidden">
-        <div className="flex flex-shrink-0 items-start gap-3 border-b border-white/5 px-6 py-4">
+        <div className="flex flex-shrink-0 items-start gap-3 border-b border-border/50 px-6 py-4">
           <div className="min-w-0 flex-1">
-            <TypographyH1 className="text-lg font-semibold text-neutral-100">{job.name}</TypographyH1>
-            <TypographyP className="mt-1 text-xs text-neutral-500">
+            <TypographyH1 className="text-lg font-semibold text-foreground">{job.name}</TypographyH1>
+            <TypographyP className="mt-1 text-xs text-muted-foreground/70">
               Stage: {job.stage} · #{job.id} · updated {formatRelativeTime(job.createdAt)}
             </TypographyP>
           </div>
           <TypographySpan
             className={cn(
-              'rounded px-2 py-1 text-xs font-medium',
-              job.status === 'success' && 'bg-status-success/15 text-status-success',
-              job.status === 'failed' && 'bg-status-failed/15 text-status-failed',
-              job.status === 'running' && 'bg-status-running/15 text-status-running',
-              job.status === 'pending' && 'bg-status-pending/15 text-status-pending'
+              'px-2 py-1 text-xs font-medium',
+              job.status === 'success' && 'bg-emerald-500/15 text-emerald-500',
+              job.status === 'failed' && 'bg-destructive/15 text-destructive',
+              job.status === 'running' && 'bg-primary/15 text-primary',
+              job.status === 'pending' && 'bg-muted text-muted-foreground'
             )}
           >
             {job.status}
@@ -132,9 +132,9 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
           )}
         </div>
 
-        <div className="flex-1 overflow-auto bg-[#0b0f14] px-4 py-3 font-mono text-xs leading-relaxed">
+        <div className="flex-1 overflow-auto bg-background px-4 py-3 font-mono text-xs leading-relaxed">
           {log.length === 0 ? (
-            <TypographyP className="text-neutral-600">Waiting for log stream…</TypographyP>
+            <TypographyP className="text-muted-foreground">Waiting for log stream…</TypographyP>
           ) : (
             <AnsiLog text={log} />
           )}
@@ -142,9 +142,9 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
       </div>
 
       {/* Right sidebar */}
-      <aside className="w-[280px] flex-shrink-0 overflow-auto border-l border-white/5 bg-base-900 px-4 py-4">
+      <aside className="w-[280px] flex-shrink-0 overflow-auto border-l border-border/50 bg-card px-4 py-4">
         <section className="mb-6">
-          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Details</TypographyH2>
+          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Details</TypographyH2>
           <div className="space-y-1 text-sm">
             <DetailRow label="Status" value={job.status} />
             <DetailRow label="Stage" value={job.stage} />
@@ -154,30 +154,30 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
         </section>
 
         <section>
-          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-neutral-500">Artifacts</TypographyH2>
+          <TypographyH2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">Artifacts</TypographyH2>
           <div className="space-y-2">
             {(artifacts ?? []).map((artifact) => (
-              <div key={artifact.id} className="rounded-lg border border-white/10 p-2.5">
+              <div key={artifact.id} className="border border-border p-2.5">
                 <div className="flex items-start gap-2">
-                  <FileArchive size={14} className="mt-0.5 flex-shrink-0 text-neutral-500" />
+                  <FileArchive size={14} className="mt-0.5 flex-shrink-0 text-muted-foreground/70" />
                   <div className="min-w-0 flex-1">
-                    <TypographyP className="truncate text-sm text-neutral-300">{artifact.filename}</TypographyP>
-                    <TypographyP className="text-xs text-neutral-600">{formatBytes(artifact.size)}</TypographyP>
+                    <TypographyP className="truncate text-sm text-muted-foreground">{artifact.filename}</TypographyP>
+                    <TypographyP className="text-xs text-muted-foreground">{formatBytes(artifact.size)}</TypographyP>
                   </div>
                   <Button
                     onClick={() => downloadMutation.mutate(artifact)}
                     variant="ghost"
                     size="icon"
-                    className="h-6 w-6 rounded p-1 text-neutral-500 hover:bg-white/5 hover:text-neutral-300"
+                    className="h-6 w-6 p-1 text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground"
                     title="Download artifact"
                   >
                     <Download size={13} />
                   </Button>
                 </div>
                 {progress[artifact.id] != null && progress[artifact.id] < 100 && (
-                  <div className="mt-2 h-1 overflow-hidden rounded bg-white/10">
+                  <div className="mt-2 h-1 overflow-hidden bg-muted">
                     <div
-                      className="h-full bg-accent-500 transition-all"
+                      className="h-full bg-primary transition-all"
                       style={{ width: `${progress[artifact.id]}%` }}
                     />
                   </div>
@@ -185,7 +185,7 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
               </div>
             ))}
             {(artifacts ?? []).length === 0 && (
-              <TypographyP className="text-sm text-neutral-600">No artifacts</TypographyP>
+              <TypographyP className="text-sm text-muted-foreground">No artifacts</TypographyP>
             )}
           </div>
         </section>
@@ -196,9 +196,9 @@ export function JobPage({ repoId, jobId }: JobPageProps) {
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between rounded bg-white/5 px-2 py-1.5">
-      <TypographySpan className="text-neutral-500">{label}</TypographySpan>
-      <TypographySpan className="text-neutral-300">{value}</TypographySpan>
+    <div className="flex items-center justify-between bg-muted px-2 py-1.5">
+      <TypographySpan className="text-muted-foreground/70">{label}</TypographySpan>
+      <TypographySpan className="text-muted-foreground">{value}</TypographySpan>
     </div>
   )
 }

@@ -3,9 +3,9 @@ import { useUIStore } from '../../store/ui'
 import { cn } from '../../lib/utils'
 import { Button } from '../ui/button'
 import {
-  LayoutDashboard, GitPullRequest, GitBranch, Bell,
-  Settings, Search, Layers, Activity
-} from 'lucide-react'
+  SquaresFour, GitPullRequest, GitBranch, Bell,
+  Gear, MagnifyingGlass, Stack, Pulse
+} from '@phosphor-icons/react'
 
 interface NavItem {
   icon: React.ReactNode
@@ -15,11 +15,11 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { icon: <LayoutDashboard size={18} />, label: 'My Work', route: '/my-work', type: 'home' },
+  { icon: <SquaresFour size={18} />, label: 'My Work', route: '/my-work', type: 'home' },
   { icon: <GitPullRequest size={18} />, label: 'Merge Requests', route: '/merge-requests', type: 'mr-list' },
   { icon: <GitBranch size={18} />, label: 'Pipelines', route: '/pipelines', type: 'pipeline-list' },
-  { icon: <Activity size={18} />, label: 'Activity', route: '/activity', type: 'activity' },
-  { icon: <Layers size={18} />, label: 'Repositories', route: '/repos', type: 'repo-list' }
+  { icon: <Pulse size={18} />, label: 'Activity', route: '/activity', type: 'activity' },
+  { icon: <Stack size={18} />, label: 'Repositories', route: '/repos', type: 'repo-list' }
 ]
 
 export function IconRail() {
@@ -37,7 +37,7 @@ export function IconRail() {
   }
 
   return (
-    <aside className="no-select flex w-[52px] flex-col items-center border-r border-white/5 bg-base-900 py-2">
+    <aside className="no-select flex w-[52px] flex-col items-center border-r border-border/50 bg-card py-2">
       {/* macOS traffic light spacer */}
       <div className="h-8 w-full" />
 
@@ -46,13 +46,13 @@ export function IconRail() {
         onClick={openCommandCenter}
         variant="ghost"
         size="icon"
-        className="no-drag mb-3 h-9 w-9 text-neutral-500 hover:text-neutral-200"
+        className="no-drag mb-3 h-9 w-9 text-muted-foreground/70 hover:text-foreground"
         title="Command Center (⌘K)"
       >
-        <Search size={16} />
+        <MagnifyingGlass size={16} />
       </Button>
 
-      <div className="mx-auto mb-2 h-px w-7 bg-white/10" />
+      <div className="mx-auto mb-2 h-px w-7 bg-muted" />
 
       {/* Nav items */}
       <nav className="flex flex-col items-center gap-1 no-drag">
@@ -66,10 +66,10 @@ export function IconRail() {
               variant="ghost"
               size="icon"
               className={cn(
-                'h-9 w-9 rounded-lg',
+                'h-9 w-9',
                 isActive
-                  ? 'bg-accent-500/15 text-accent-400'
-                  : 'text-neutral-500 hover:text-neutral-200'
+                  ? 'bg-primary/15 text-primary'
+                  : 'text-muted-foreground/70 hover:text-foreground'
               )}
             >
               {item.icon}
@@ -87,7 +87,7 @@ export function IconRail() {
         title="Notifications"
         variant="ghost"
         size="icon"
-        className="no-drag mb-1 h-9 w-9 text-neutral-500 hover:text-neutral-200"
+        className="no-drag mb-1 h-9 w-9 text-muted-foreground/70 hover:text-foreground"
       >
         <Bell size={16} />
       </Button>
@@ -98,9 +98,9 @@ export function IconRail() {
         title="Settings"
         variant="ghost"
         size="icon"
-        className="no-drag mb-2 h-9 w-9 text-neutral-500 hover:text-neutral-200"
+        className="no-drag mb-2 h-9 w-9 text-muted-foreground/70 hover:text-foreground"
       >
-        <Settings size={16} />
+        <Gear size={16} />
       </Button>
     </aside>
   )

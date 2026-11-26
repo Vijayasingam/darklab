@@ -7,7 +7,7 @@ import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { formatRelativeTime } from '../lib/utils'
-import { Loader2, GitPullRequest, GitBranch, CheckCircle2, XCircle, Clock, AlertCircle } from 'lucide-react'
+import { CircleNotch, GitPullRequest, GitBranch, CheckCircle, XCircle, Clock, WarningCircle } from '@phosphor-icons/react'
 
 interface MyWorkData {
   needsReview: MergeRequest[]
@@ -18,13 +18,13 @@ interface MyWorkData {
 
 function PipelineStatusIcon({ status }: { status: string }) {
   const map: Record<string, { icon: React.ReactNode; className: string }> = {
-    success: { icon: <CheckCircle2 size={14} />, className: 'text-status-success' },
-    failed: { icon: <XCircle size={14} />, className: 'text-status-failed' },
-    running: { icon: <Loader2 size={14} className="animate-spin" />, className: 'text-status-running' },
-    pending: { icon: <Clock size={14} />, className: 'text-status-pending' },
-    canceled: { icon: <XCircle size={14} />, className: 'text-neutral-500' }
+    success: { icon: <CheckCircle size={14} />, className: 'text-emerald-500' },
+    failed: { icon: <XCircle size={14} />, className: 'text-destructive' },
+    running: { icon: <CircleNotch size={14} className="animate-spin" />, className: 'text-primary' },
+    pending: { icon: <Clock size={14} />, className: 'text-muted-foreground' },
+    canceled: { icon: <XCircle size={14} />, className: 'text-muted-foreground/70' }
   }
-  const entry = map[status] ?? { icon: <AlertCircle size={14} />, className: 'text-neutral-500' }
+  const entry = map[status] ?? { icon: <WarningCircle size={14} />, className: 'text-muted-foreground/70' }
   return <TypographySpan className={entry.className}>{entry.icon}</TypographySpan>
 }
 
@@ -33,12 +33,12 @@ function MRRow({ mr, onOpen }: { mr: MergeRequest; onOpen: (mr: MergeRequest, ne
     <Button
       onClick={(e) => onOpen(mr, e.metaKey || e.ctrlKey)}
       variant="ghost"
-      className="flex h-auto w-full items-start gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
+      className="flex h-auto w-full items-start gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted/50"
     >
-      <GitPullRequest size={14} className="mt-0.5 flex-shrink-0 text-accent-400" />
+      <GitPullRequest size={14} className="mt-0.5 flex-shrink-0 text-primary" />
       <div className="min-w-0 flex-1">
-        <TypographyP className="truncate text-sm text-neutral-200">{mr.title}</TypographyP>
-        <TypographyP className="mt-0.5 text-xs text-neutral-500">
+        <TypographyP className="truncate text-sm text-foreground">{mr.title}</TypographyP>
+        <TypographyP className="mt-0.5 text-xs text-muted-foreground/70">
           {mr.repoFullPath} · !{mr.iid} · {formatRelativeTime(mr.updatedAt)}
         </TypographyP>
       </div>
@@ -61,11 +61,11 @@ function Section({
   return (
     <section className="mb-6">
       <div className="mb-2 flex items-center gap-2">
-        <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">{title}</TypographyH2>
-        <TypographySpan className="rounded-full bg-white/5 px-1.5 py-0.5 text-xs text-neutral-500">{count}</TypographySpan>
+        <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">{title}</TypographyH2>
+        <TypographySpan className="bg-muted px-1.5 py-0.5 text-xs text-muted-foreground/70">{count}</TypographySpan>
       </div>
       {count === 0 ? (
-        <TypographyP className="py-2 text-sm text-neutral-600">None</TypographyP>
+        <TypographyP className="py-2 text-sm text-muted-foreground">None</TypographyP>
       ) : (
         <div className="space-y-0.5">{children}</div>
       )}
@@ -99,7 +99,7 @@ export function MyWorkPage() {
 
   if (!accountId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 text-neutral-500">
+      <div className="flex h-full flex-col items-center justify-center gap-4 text-muted-foreground/70">
         <GitBranch size={40} className="opacity-30" />
         <TypographyP className="text-sm">Add an account to get started</TypographyP>
         <Button
@@ -122,15 +122,15 @@ export function MyWorkPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-600">
-        <Loader2 size={20} className="animate-spin" />
+      <div className="flex h-full items-center justify-center text-muted-foreground">
+        <CircleNotch size={20} className="animate-spin" />
       </div>
     )
   }
 
   if (error || !data) {
     return (
-      <div className="flex h-full items-center justify-center text-neutral-500 text-sm">
+      <div className="flex h-full items-center justify-center text-muted-foreground/70 text-sm">
         Failed to load My Work
       </div>
     )
@@ -139,7 +139,7 @@ export function MyWorkPage() {
   return (
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-3xl px-6 py-6">
-        <TypographyH1 className="mb-6 text-xl font-semibold text-neutral-100">My Work</TypographyH1>
+        <TypographyH1 className="mb-6 text-xl font-semibold text-foreground">My Work</TypographyH1>
 
         <Section title="Needs your review" count={data.needsReview.length}>
           {data.needsReview.map((mr) => (
@@ -162,7 +162,7 @@ export function MyWorkPage() {
         {data.myPipelines.length > 0 && (
           <section className="mb-6">
             <div className="mb-2 flex items-center gap-2">
-              <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+              <TypographyH2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground/70">
                 Recent pipelines
               </TypographyH2>
             </div>
@@ -183,14 +183,14 @@ export function MyWorkPage() {
                     )
                   }
                   variant="ghost"
-                  className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-white/5"
+                  className="flex h-auto w-full items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted/50"
                 >
                   <PipelineStatusIcon status={p.status} />
                   <div className="min-w-0 flex-1">
-                    <TypographyP className="truncate text-sm text-neutral-200">
+                    <TypographyP className="truncate text-sm text-foreground">
                       #{p.id} · {p.ref}
                     </TypographyP>
-                    <TypographyP className="mt-0.5 text-xs text-neutral-500">{formatRelativeTime(p.updatedAt)}</TypographyP>
+                    <TypographyP className="mt-0.5 text-xs text-muted-foreground/70">{formatRelativeTime(p.updatedAt)}</TypographyP>
                   </div>
                 </Button>
               ))}

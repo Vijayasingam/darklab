@@ -1,4 +1,4 @@
-import { app, BrowserWindow, globalShortcut, nativeImage, nativeTheme, shell } from 'electron'
+import { app, BrowserWindow, globalShortcut, nativeImage, shell } from 'electron'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { existsSync } from 'fs'
 import { join } from 'path'
@@ -23,40 +23,35 @@ registerProtocol()
 
 app.name = 'Darklab'
 
-function resolveDockIconPath(useDarkTheme: boolean): string | undefined {
-  const themedName = useDarkTheme ? 'icon-dark.png' : 'icon-light.png'
+/**
+ * Dev only: packaged builds get their dock icon from build/icon.icns via the
+ * app bundle (macOS applies its own squircle mask there). In dev there is no
+ * bundle, so the dock would fall back to Electron's default icon — set our
+ * icon manually instead. Icons set this way receive NO squircle mask, so the
+ * PNG must be full-bleed opaque (baked transparent corners show a white
+ * backing plate behind the rounded corners).
+ */
+function applyDevDockIcon(): void {
+  if (!is.dev || process.platform !== 'darwin') return
+
   const candidates = [
-    join(process.resourcesPath, 'resources', themedName),
-    join(app.getAppPath(), 'resources', themedName),
-    join(process.cwd(), 'build', themedName),
-    join(process.resourcesPath, 'resources', 'icon.png'),
-    join(app.getAppPath(), 'resources', 'icon.png'),
-    join(process.cwd(), 'build', 'icon.png')
+    join(process.cwd(), 'resources', 'icon.png'),
+    join(app.getAppPath(), 'resources', 'icon.png')
   ]
+  const iconPath = candidates.find((p) => existsSync(p))
+  if (!iconPath) return
 
-  return candidates.find((p) => existsSync(p))
-}
-
-function applyDockIconForTheme(): void {
-  if (process.platform !== 'darwin') return
-
-  const dockIconPath = resolveDockIconPath(nativeTheme.shouldUseDarkColors)
-  if (dockIconPath) {
-    // Our PNGs are 512×512px. Without a scaleFactor Electron treats them as
-    // 512 logical points — way too large. Loading as @2x makes the logical
-    // size 256pt, which matches the macOS dock's natural icon slot.
-    const raw = nativeImage.createFromPath(dockIconPath)
-    const icon = nativeImage.createFromBuffer(raw.toPNG(), { scaleFactor: 2.0 })
-    app.dock?.setIcon(icon)
-  }
+  // 512px PNG loaded at 2x so the logical size (256pt) matches the dock slot
+  const raw = nativeImage.createFromPath(iconPath)
+  const icon = nativeImage.createFromBuffer(raw.toPNG(), { scaleFactor: 2.0 })
+  app.dock?.setIcon(icon)
 }
 
 app.whenReady().then(async () => {
   // Set app user model id for Windows
   electronApp.setAppUserModelId('com.go-dark.darklab')
 
-  applyDockIconForTheme()
-  nativeTheme.on('updated', applyDockIconForTheme)
+  applyDevDockIcon()
 
   // Dev: watch shortcuts; prod: prevent default
   app.on('browser-window-created', (_, window) => {
@@ -125,7 +120,6 @@ app.on('window-all-closed', () => {
 })
 
 app.on('will-quit', () => {
-  nativeTheme.removeListener('updated', applyDockIconForTheme)
   globalShortcut.unregisterAll()
   stopPolling()
 })

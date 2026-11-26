@@ -9,7 +9,7 @@ import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { cn, formatRelativeTime, formatDuration } from '../lib/utils'
-import { Loader2 } from 'lucide-react'
+import { CircleNotch } from '@phosphor-icons/react'
 
 interface PipelineListPageProps {
   filters?: Record<string, unknown>
@@ -43,12 +43,12 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-4xl px-6 py-6">
         <div className="mb-4 flex items-center justify-between">
-          <TypographyH1 className="text-xl font-semibold text-neutral-100">Pipelines</TypographyH1>
+          <TypographyH1 className="text-xl font-semibold text-foreground">Pipelines</TypographyH1>
 
           <Tabs value={status} onValueChange={(v) => setStatus(v as PipelineStatus | 'all')} className="w-auto">
             <TabsList variant="compact">
               {STATUS_OPTIONS.map((opt) => (
-                <TabsTrigger key={opt.value} value={opt.value} variant="compact">
+                <TabsTrigger key={opt.value} value={opt.value}>
                   {opt.label}
                 </TabsTrigger>
               ))}
@@ -57,8 +57,8 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-neutral-600">
-            <Loader2 size={20} className="animate-spin" />
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <CircleNotch size={20} className="animate-spin" />
           </div>
         ) : (
           <div className="space-y-0.5">
@@ -78,34 +78,34 @@ export function PipelineListPage({ filters }: PipelineListPageProps) {
                   )
                 }
                 variant="ghost"
-                className="flex h-auto w-full items-center gap-3 rounded-lg px-3 py-3 text-left hover:bg-white/5"
+                className="flex h-auto w-full items-center gap-3 px-3 py-3 text-left hover:bg-muted/50"
               >
                 <TypographySpan
                   className={cn(
                     'w-[72px] flex-shrink-0 text-sm font-medium',
-                    p.status === 'success' && 'text-status-success',
-                    p.status === 'failed' && 'text-status-failed',
-                    p.status === 'running' && 'text-status-running',
-                    p.status === 'pending' && 'text-status-pending',
-                    p.status === 'canceled' && 'text-neutral-500'
+                    p.status === 'success' && 'text-emerald-500',
+                    p.status === 'failed' && 'text-destructive',
+                    p.status === 'running' && 'text-primary',
+                    p.status === 'pending' && 'text-muted-foreground',
+                    p.status === 'canceled' && 'text-muted-foreground/70'
                   )}
                 >
                   {p.status}
                 </TypographySpan>
                 <div className="min-w-0 flex-1">
-                  <TypographyP className="truncate text-sm text-neutral-200">
+                  <TypographyP className="truncate text-sm text-foreground">
                     #{p.id} · {p.ref}
                   </TypographyP>
-                  <TypographyP className="mt-0.5 text-xs text-neutral-500">{p.repoFullPath || `repo:${p.repoId}`}</TypographyP>
+                  <TypographyP className="mt-0.5 text-xs text-muted-foreground/70">{p.repoFullPath || `repo:${p.repoId}`}</TypographyP>
                 </div>
-                <div className="flex-shrink-0 text-right text-xs text-neutral-600">
+                <div className="flex-shrink-0 text-right text-xs text-muted-foreground">
                   <TypographyP>{formatDuration(p.duration)}</TypographyP>
                   <TypographyP>{formatRelativeTime(p.updatedAt)}</TypographyP>
                 </div>
               </Button>
             ))}
             {(pipelines ?? []).length === 0 && (
-              <TypographyP className="py-8 text-center text-sm text-neutral-600">No pipelines</TypographyP>
+              <TypographyP className="py-8 text-center text-sm text-muted-foreground">No pipelines</TypographyP>
             )}
           </div>
         )}

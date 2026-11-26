@@ -18,9 +18,9 @@ const OnboardingPage = lazy(() => import('../../pages/OnboardingPage').then((m) 
 function PageLoader() {
   return (
     <div className="p-6">
-      <Skeleton className="mb-3 h-8 w-56 rounded" />
-      <Skeleton className="mb-2 h-4 w-96 rounded" />
-      <Skeleton className="h-[70vh] w-full rounded-xl" />
+      <Skeleton className="mb-3 h-8 w-56" />
+      <Skeleton className="mb-2 h-4 w-96" />
+      <Skeleton className="h-[70vh] w-full" />
     </div>
   )
 }
@@ -30,7 +30,7 @@ export function TabContent() {
   const activeTabId = useTabsStore((s) => s.activeTabId)
 
   return (
-    <div className="relative flex-1 overflow-hidden bg-base-950">
+    <div className="relative flex-1 overflow-hidden bg-background">
       {tabs.map((tab) => (
         <div
           key={tab.id}
@@ -49,7 +49,7 @@ export function TabContent() {
 function RouteView({ route, state }: { route?: string; state: Record<string, unknown> }) {
   if (!route) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-neutral-600">
+      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
         No route selected
       </div>
     )
@@ -67,7 +67,7 @@ function RouteView({ route, state }: { route?: string; state: Record<string, unk
   if (route === '/settings') return <SettingsPage section={state['section'] as string} />
   if (route === '/onboarding') return <OnboardingPage />
   return (
-    <div className="flex h-full items-center justify-center text-neutral-600 text-sm">
+    <div className="flex h-full items-center justify-center text-muted-foreground text-sm">
       Unknown route: {route}
     </div>
   )

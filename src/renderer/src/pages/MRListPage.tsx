@@ -9,7 +9,7 @@ import { invoke } from '../lib/ipc'
 import { useAccountStore } from '../store/account'
 import { useTabsStore } from '../store/tabs'
 import { cn, formatRelativeTime } from '../lib/utils'
-import { Loader2, GitPullRequest, User } from 'lucide-react'
+import { CircleNotch, GitPullRequest, User } from '@phosphor-icons/react'
 
 interface MRListPageProps {
   filters?: Record<string, unknown>
@@ -55,13 +55,13 @@ export function MRListPage({ filters }: MRListPageProps) {
     <div className="h-full overflow-auto">
       <div className="mx-auto max-w-4xl px-6 py-6">
         <div className="mb-4 flex items-center justify-between">
-          <TypographyH1 className="text-xl font-semibold text-neutral-100">Merge Requests</TypographyH1>
+          <TypographyH1 className="text-xl font-semibold text-foreground">Merge Requests</TypographyH1>
 
           {/* State filter */}
           <Tabs value={state} onValueChange={(v) => setState(v as MRState | 'all')} className="w-auto">
             <TabsList variant="compact">
               {STATE_OPTIONS.map((opt) => (
-                <TabsTrigger key={opt.value} value={opt.value} variant="compact">
+                <TabsTrigger key={opt.value} value={opt.value}>
                   {opt.label}
                 </TabsTrigger>
               ))}
@@ -70,8 +70,8 @@ export function MRListPage({ filters }: MRListPageProps) {
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-neutral-600">
-            <Loader2 size={20} className="animate-spin" />
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <CircleNotch size={20} className="animate-spin" />
           </div>
         ) : (
           <div className="space-y-0.5">
@@ -80,12 +80,12 @@ export function MRListPage({ filters }: MRListPageProps) {
                 key={mr.id}
                 onClick={(e) => openMR(mr, e.metaKey || e.ctrlKey)}
                 variant="ghost"
-                className="flex h-auto w-full items-start gap-3 rounded-lg px-3 py-3 text-left transition-colors hover:bg-white/5"
+                className="flex h-auto w-full items-start gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/50"
               >
-                <GitPullRequest size={15} className="mt-0.5 flex-shrink-0 text-accent-400" />
+                <GitPullRequest size={15} className="mt-0.5 flex-shrink-0 text-primary" />
                 <div className="min-w-0 flex-1">
-                  <TypographyP className="truncate text-sm text-neutral-200">{mr.title}</TypographyP>
-                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-neutral-500">
+                  <TypographyP className="truncate text-sm text-foreground">{mr.title}</TypographyP>
+                  <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground/70">
                     <TypographySpan>{mr.repoFullPath} · !{mr.iid}</TypographySpan>
                     <TypographySpan>·</TypographySpan>
                     <TypographySpan className="flex items-center gap-1">
@@ -97,7 +97,7 @@ export function MRListPage({ filters }: MRListPageProps) {
                     {mr.labels.map((l) => (
                       <TypographySpan
                         key={l.id}
-                        className="rounded px-1.5 py-0.5"
+                        className="px-1.5 py-0.5"
                         style={{ background: l.color + '20', color: l.color }}
                       >
                         {l.name}
@@ -109,9 +109,9 @@ export function MRListPage({ filters }: MRListPageProps) {
                   <TypographySpan
                     className={cn(
                       'flex-shrink-0 text-xs',
-                      mr.pipelineStatus === 'success' && 'text-status-success',
-                      mr.pipelineStatus === 'failed' && 'text-status-failed',
-                      mr.pipelineStatus === 'running' && 'text-status-running'
+                      mr.pipelineStatus === 'success' && 'text-emerald-500',
+                      mr.pipelineStatus === 'failed' && 'text-destructive',
+                      mr.pipelineStatus === 'running' && 'text-primary'
                     )}
                   >
                     {mr.pipelineStatus}
@@ -120,7 +120,7 @@ export function MRListPage({ filters }: MRListPageProps) {
               </Button>
             ))}
             {(mrs ?? []).length === 0 && (
-              <TypographyP className="py-8 text-center text-sm text-neutral-600">No merge requests</TypographyP>
+              <TypographyP className="py-8 text-center text-sm text-muted-foreground">No merge requests</TypographyP>
             )}
           </div>
         )}

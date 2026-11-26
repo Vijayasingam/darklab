@@ -3,7 +3,7 @@ import { Button } from '../ui/button'
 import { useRef } from 'react'
 import { useTabsStore } from '../../store/tabs'
 import { cn } from '../../lib/utils'
-import { X, Plus, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, Plus, CaretLeft, CaretRight } from '@phosphor-icons/react'
 import { AppTab } from '@shared/types'
 import {
   DndContext,
@@ -37,10 +37,10 @@ function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }) {
       {...attributes}
       {...listeners}
       className={cn(
-        'group relative flex min-w-0 max-w-[200px] flex-shrink-0 cursor-default select-none items-center gap-1.5 border-r border-white/5 px-3 py-1.5 text-sm transition-colors',
+        'group relative flex min-w-0 max-w-[200px] flex-shrink-0 cursor-default select-none items-center gap-1.5 border-r border-border/50 px-3 py-1.5 text-sm transition-colors',
         isActive
-          ? 'bg-base-800 text-neutral-100'
-          : 'text-neutral-500 hover:bg-white/5 hover:text-neutral-300',
+          ? 'bg-popover text-foreground'
+          : 'text-muted-foreground/70 hover:bg-muted/50 hover:text-foreground',
         isDragging && 'opacity-50'
       )}
       onClick={() => setActiveTab(tab.id)}
@@ -54,10 +54,10 @@ function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }) {
         variant="ghost"
         size="icon"
         className={cn(
-          'h-4 w-4 flex-shrink-0 rounded transition-colors',
+          'h-4 w-4 flex-shrink-0 transition-colors',
           'opacity-0 group-hover:opacity-100',
           isActive && 'opacity-60',
-          'hover:bg-white/10 hover:!opacity-100'
+          'hover:bg-muted hover:!opacity-100'
         )}
       >
         <X size={10} />
@@ -65,7 +65,7 @@ function SortableTab({ tab, isActive }: { tab: AppTab; isActive: boolean }) {
 
       {/* Active indicator */}
       {isActive && (
-        <TypographySpan className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent-500" />
+        <TypographySpan className="absolute bottom-0 left-0 right-0 h-[2px] bg-primary" />
       )}
     </div>
   )
@@ -94,7 +94,7 @@ export function TabBar() {
   }
 
   return (
-    <div className="drag-region flex h-9 flex-shrink-0 items-stretch border-b border-white/5 bg-base-950">
+    <div className="drag-region flex h-9 flex-shrink-0 items-stretch border-b border-border/50 bg-background">
       {/* macOS traffic light space */}
       <div className="w-[70px] flex-shrink-0" />
 
@@ -103,9 +103,9 @@ export function TabBar() {
         onClick={() => scroll('left')}
         variant="ghost"
         size="icon"
-        className="no-drag h-9 w-7 flex-shrink-0 rounded-none px-1 text-neutral-600 hover:text-neutral-300"
+        className="no-drag h-9 w-7 flex-shrink-0 px-1 text-muted-foreground hover:text-foreground"
       >
-        <ChevronLeft size={12} />
+        <CaretLeft size={12} />
       </Button>
 
       {/* Tab list */}
@@ -128,9 +128,9 @@ export function TabBar() {
         onClick={() => scroll('right')}
         variant="ghost"
         size="icon"
-        className="no-drag h-9 w-7 flex-shrink-0 rounded-none px-1 text-neutral-600 hover:text-neutral-300"
+        className="no-drag h-9 w-7 flex-shrink-0 px-1 text-muted-foreground hover:text-foreground"
       >
-        <ChevronRight size={12} />
+        <CaretRight size={12} />
       </Button>
 
       {/* New tab button */}
@@ -143,7 +143,7 @@ export function TabBar() {
         }
         variant="ghost"
         size="icon"
-        className="no-drag h-9 w-8 flex-shrink-0 rounded-none px-2 text-neutral-600 hover:text-neutral-300"
+        className="no-drag h-9 w-8 flex-shrink-0 px-2 text-muted-foreground hover:text-foreground"
         title="New tab"
       >
         <Plus size={14} />

@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { Command } from 'cmdk'
+import {
+  Command,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandItem
+} from '../ui/command'
 import { useUIStore } from '../../store/ui'
 import { useTabsStore } from '../../store/tabs'
 
@@ -37,30 +43,34 @@ export function CommandCenter() {
   if (!open) return <></>
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-start justify-center bg-black/50 pt-[15vh]" onClick={close}>
-      <div className="w-full max-w-xl overflow-hidden rounded-xl border border-white/10 bg-base-900 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+    <div
+      className="fixed inset-0 z-[200] flex items-start justify-center bg-black/50 pt-[15vh]"
+      onClick={close}
+    >
+      <div
+        className="w-full max-w-xl overflow-hidden border border-border bg-popover shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
         <Command>
-          <Command.Input
+          <CommandInput
             value={query}
             onValueChange={setQuery}
             placeholder="Type a command or search..."
-            className="w-full border-b border-white/10 bg-transparent px-4 py-3 text-sm text-neutral-200 outline-none placeholder:text-neutral-600"
           />
-          <Command.List className="max-h-[360px] overflow-auto p-1">
-            <Command.Empty className="px-3 py-6 text-center text-sm text-neutral-600">No results</Command.Empty>
+          <CommandList>
+            <CommandEmpty>No results</CommandEmpty>
             {filtered.map((cmd) => (
-              <Command.Item
+              <CommandItem
                 key={cmd.id}
                 onSelect={() => {
                   openTab({ type: cmd.type as never, title: cmd.label.replace('Go to ', ''), route: cmd.route, routeState: {} })
                   close()
                 }}
-                className="cursor-default rounded-md px-3 py-2 text-sm text-neutral-300 data-[selected=true]:bg-white/10 data-[selected=true]:text-neutral-100"
               >
                 {cmd.label}
-              </Command.Item>
+              </CommandItem>
             ))}
-          </Command.List>
+          </CommandList>
         </Command>
       </div>
     </div>

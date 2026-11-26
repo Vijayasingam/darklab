@@ -1,12 +1,4 @@
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
-
-// ---------------------------------------------------------------------------
-// cn — merge Tailwind classes safely
-// ---------------------------------------------------------------------------
-export function cn(...inputs: ClassValue[]): string {
-  return twMerge(clsx(inputs))
-}
+export { cn } from 'cn'
 
 // ---------------------------------------------------------------------------
 // Formatting helpers
@@ -52,8 +44,8 @@ export function formatBytes(bytes: number): string {
 }
 
 export function truncate(str: string, maxLen: number): string {
-  if (str.length <= maxLen) return str
-  return str.slice(0, maxLen - 1) + '…'
+  if (str.length > maxLen) return str.slice(0, maxLen - 1) + '…'
+  return str
 }
 
 export function initials(name: string): string {

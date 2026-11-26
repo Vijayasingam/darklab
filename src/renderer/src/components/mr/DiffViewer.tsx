@@ -30,14 +30,14 @@ export function DiffViewer({ repoId, mrIid, file, threads: _threads }: DiffViewe
   if (isLoading || !pair) {
     return (
       <div className="p-4">
-        <Skeleton className="h-[calc(100vh-240px)] w-full rounded-xl" />
+        <Skeleton className="h-[calc(100vh-240px)] w-full" />
       </div>
     )
   }
 
   if (file.isBinary) {
     return (
-      <div className="flex h-full items-center justify-center text-sm text-neutral-600">
+      <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
         Binary file — diff not available
       </div>
     )
